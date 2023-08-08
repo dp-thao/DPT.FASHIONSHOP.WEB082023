@@ -155,7 +155,10 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\CalculationUnitController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ProductGroupController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -180,6 +183,29 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\Image\ImgContent\arrow-down-line.png" />
+    <Content Include="Content\Image\ImgContent\arrow-down-white.png" />
+    <Content Include="Content\Image\ImgContent\common-icon.png" />
+    <Content Include="Content\Image\ImgContent\copy-down.png" />
+    <Content Include="Content\Image\ImgContent\exclamation.png" />
+    <Content Include="Content\Image\ImgContent\icon-delete.png" />
+    <Content Include="Content\Image\ImgContent\quick-add.png" />
+    <Content Include="Content\Image\ImgHeader\arrow-down-line.png" />
+    <Content Include="Content\Image\ImgHeader\back.png" />
+    <Content Include="Content\Image\ImgHeader\copy-down.png" />
+    <Content Include="Content\Image\ImgHeader\icon-change-password16.png" />
+    <Content Include="Content\Image\ImgHeader\icon-feedback.png" />
+    <Content Include="Content\Image\ImgHeader\icon-help-18-hover.png" />
+    <Content Include="Content\Image\ImgHeader\icon-logout16.png" />
+    <Content Include="Content\Image\ImgHeader\icon_help_18.png" />
+    <Content Include="Content\Image\ImgHeader\logo-mshopkeeper.png" />
+    <Content Include="Content\Image\ImgHeader\notify-18.png" />
+    <Content Include="Content\Image\ImgHeader\notify-hover-18.png" />
+    <Content Include="Content\Image\ImgSidebar\icon_5shop_white_24_1.png" />
+    <Content Include="Content\Image\ImgSidebar\ic_ocm_logo.png" />
+    <Content Include="Content\Image\ImgSidebar\ic_sogiaohang.png" />
+    <Content Include="Content\Image\ImgSidebar\slibarmenu.png" />
+    <Content Include="Content\Product.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -213,6 +239,8 @@
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\Views\Product.js" />
+    <Content Include="Scripts\Views\ProductDetail.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -227,10 +255,13 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\CalculationUnit\" />
+    <Folder Include="Views\ProductGroup\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\bootstrap.min.js.map" />
@@ -302,6 +333,16 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DPT.BL\DPT.BL.csproj">
+      <Project>{b423ab2a-b230-4ad4-b713-461f602f87a7}</Project>
+      <Name>DPT.BL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DPT.Entity\DPT.Entity.csproj">
+      <Project>{9e682244-3169-46f5-8454-20093b7864d5}</Project>
+      <Name>DPT.Entity</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

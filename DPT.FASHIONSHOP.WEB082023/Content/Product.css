@@ -1,0 +1,1481 @@
+﻿html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Roboto;
+}
+
+:root {
+    --primary-text-color: #fff;
+    --primary-color: #006189;
+    --primary-background-color: #026b97;
+    --height-header: 52px;
+    --width-col-check: 40px;
+    --width-col-sku: 100px;
+    --width-col-productname: 795px;
+    --width-col-groupproduct: 130px;
+    --width-col-counter: 100px;
+    --width-col-price: 110px;
+    --width-col-displayscreen: 180px;
+    --width-col-category: 120px;
+    --width-col-status: 145px;
+}
+
+.main {
+}
+/* ===================================== HEADER ========================================== */
+.header {
+    height: var(--height-header);
+    display: flex;
+}
+
+.logo {
+    width: 140px;
+    height: 100%;
+    background-color: var(--primary-color);
+    display: flex;
+}
+
+.logo-icon {
+    padding-top: 13px;
+    margin-left: 10px;
+}
+
+.header-panel {
+    width: calc(100% - 140px);
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+}
+
+    .header-panel .panel-title {
+        height: 17px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #212121;
+        display: flex;
+        align-items: center;
+        margin-right: 4px;
+        padding-left: 21px;
+    }
+
+.panel-title-text-task {
+    display: none;
+}
+
+.panel-title-text-catalog {
+    align-items: center;
+    display: flex;
+}
+
+.header-panel .panel-item {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 102px;
+}
+
+.panel-title-text {
+    font-size: 18px;
+    font-weight: bold;
+    width: 100%;
+    height: 17px;
+    align-items: center;
+    display: flex;
+    padding-left: 21px;
+}
+
+.panel-back {
+    height: 26px;
+    right: 589px;
+    width: auto;
+    display: flex;
+    cursor: pointer;
+    border-right: 1px solid #e1e1e1;
+    padding-right: 8px;
+    margin-top: 5px;
+    margin-right: 24px;
+}
+
+.panel-back-icon {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background-image: url(/Content/Image/ImgHeader/back.png);
+    background-position: left;
+    background-repeat: no-repeat;
+    margin-right: 3px;
+    margin-top: 3px;
+}
+
+.panel-back-text {
+    font-size: 12px;
+    padding: 2px 5px 0px 5px;
+    color: #026b97;
+    font-weight: 500;
+}
+
+    .panel-back-text:hover {
+        color: #0088c2;
+        font-weight: 600;
+    }
+
+.panel-shop {
+    width: auto;
+    height: 32px;
+    right: 368px;
+    border: 1px solid #ccc;
+    display: flex;
+    border-radius: 3px;
+    padding: 7px;
+    cursor: pointer;
+    align-items: center;
+    margin-right: 9px;
+}
+
+.panel-text-in-control {
+    font-size: 13px !important;
+    padding: 0px 11px 0px 5px;
+    height: 20px;
+    white-space: nowrap;
+}
+
+.panel-shop-name {
+    font-weight: 500;
+    padding: 1px 5px;
+}
+
+.account-option-item {
+    height: 32px;
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin: 0px 1px;
+    border-bottom: 1px solid #ccc;
+}
+
+    .account-option-item:hover {
+        background-color: white !important;
+        color: #5491ae;
+    }
+
+.panel-account {
+    height: 32px;
+    width: auto;
+    right: 201px;
+    display: flex;
+    padding: 7px;
+    align-items: center;
+    cursor: pointer;
+}
+
+.panel-account-icon {
+    height: 28px;
+    width: 28px;
+    margin-right: 3px;
+    display: block;
+    background-image: url(https://demoquanao.mshopkeeper.vn/backendg1/api/Image?id=&type=0&w=50&h=50&CompanyCode=demoquanao);
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 50%;
+    background-size: 28px;
+}
+
+.panel-account-name {
+    font-weight: 700;
+    padding: 2px 11px 0px 5px;
+}
+
+.panel-select-button {
+    width: 20px;
+    height: 10px;
+    background-image: url(/Content/Image/ImgHeader/arrow-down-line.png);
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: 4px;
+}
+
+.header-panel .panel-task {
+    right: 1px;
+    width: 100px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+}
+
+.panel-task-item {
+    width: 50px;
+    height: 100%;
+    border-left: 1px solid #e1e1e1;
+    border-right: 1px solid white;
+    margin-right: 1px;
+}
+
+.panel-task-item-select {
+    width: 46px;
+    height: 36px;
+    margin: 0px 2px 0px 2px;
+    padding: 7px;
+}
+
+.panel-task-item-select-icon {
+    height: 100%;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+
+.panel-icon-notify {
+    background-image: url(/Content/Image/ImgHeader/notify-18.png);
+}
+
+    .panel-icon-notify:hover {
+        background-image: url(/Content/Image/ImgHeader/notify-hover-18.png);
+    }
+
+.panel-icon-help {
+    background-image: url(/Content/Image/ImgHeader/icon_help_18.png);
+    background-position: 6px 1px;
+}
+
+    .panel-icon-help:hover {
+        background-image: url(/Content/Image/ImgHeader/icon-help-18-hover.png);
+        background-position: 6px 1px;
+    }
+
+.option-account-item-icon {
+    height: 16px;
+    width: 16px;
+    margin-right: 8px;
+    background-repeat: no-repeat;
+}
+
+.option-account-item-icon-changepass {
+    background-image: url(/Content/Image/ImgHeader/icon-change-password16.png);
+}
+
+.option-account-item-icon-feedback {
+    background-image: url(/Content/Image/ImgHeader/icon-feedback.png);
+}
+
+.option-account-item-icon-logout {
+    background-image: url(/Content/Image/ImgHeader/icon-logout16.png);
+}
+/* ===================================== SIDEBAR========================================== */
+.sidebar {
+    width: 140px;
+    position: absolute;
+    top: var(--height-header);
+    left: 0;
+    bottom: 0;
+    background-color: var(--primary-background-color);
+}
+
+.sidebar-center-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.center-menu-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 9px 0;
+    margin-bottom: 4px;
+}
+
+    .center-menu-item.active, .center-menu-item:hover,
+    .center-menu-item.active:hover, .center-menu-item.active:focus {
+        background-color: #00577b;
+        color: var(--primary-text-color);
+        border-radius: 0;
+        cursor: pointer;
+    }
+
+.center-menu-item-link, .center-menu-item-link:hover {
+    color: var(--primary-text-color);
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.menu-item-icon {
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+    background-image: url(/Content/Image/ImgSidebar/slibarmenu.png);
+    background-repeat: no-repeat;
+    margin: 0 8px;
+}
+
+.menu-item-icon-dashboad {
+    background-position: -1px -1px;
+}
+
+.menu-item-icon-report {
+    background-position: -1px -279px;
+}
+
+.menu-item-icon-delivery {
+    background-image: url(/Content/Image/ImgSidebar/ic_sogiaohang.png);
+    background-position: 2px 1px;
+}
+
+.menu-item-icon-purchare {
+    background-position: -3px -41px;
+}
+
+.menu-item-icon-stock {
+    background-position: -1px -81px;
+}
+
+.menu-item-icon-cash {
+    background-position: -2px -122px;
+}
+
+.menu-item-icon-payment {
+    background-position: -3px -161px;
+}
+
+.menu-item-icon-sale {
+    background-position: -2px -200px;
+}
+
+.menu-item-icon-dictionary {
+    background-position: -2px -239px;
+}
+
+.menu-item-icon-setting {
+    background-position: -2px -321px;
+}
+
+.menu-item-icon-support {
+    background-position: -2px -391px;
+}
+
+.menu-item-icon-ocm {
+    background-image: url(/Content/Image/ImgSidebar/ic_ocm_logo.png);
+    background-position: 2px 3px;
+}
+
+.menu-item-icon-fiveshop {
+    background-image: url(/Content/Image/ImgSidebar/icon_5shop_white_24_1.png);
+    background-position: -1px -2px;
+}
+
+.menu-item-icon-last {
+    background-position: 0px -355px;
+}
+
+
+/* ===================================== CONTENT PRODUCT ========================================== */
+.content {
+    background-color: #e5e6eb;
+    padding: 8px;
+    position: absolute;
+    top: 52px;
+    right: 0;
+    bottom: 0;
+    left: 140px;
+    margin: 0;
+}
+
+.content-product {
+    display: block;
+}
+
+.toolbar {
+    height: 36px;
+    background-color: var(--primary-background-color);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: #fff;
+    font-size: 13px;
+    display: flex;
+}
+
+.toolbar-button {
+    display: inline-flex;
+    height: 100%;
+    width: fit-content;
+    align-items: center;
+    padding: 0 8px;
+}
+
+    .toolbar-button:hover {
+        cursor: pointer;
+        background-color: #0088c2;
+    }
+
+.toolbar-button-slipoption {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: url(/Content/Image/ImgContent/common-icon.png);
+}
+
+.toolbar-button-slipoption-down {
+    background: url(/Content/Image/ImgContent/arrow-down-white.png);
+}
+
+.toolbar-btn-icon-add {
+    background-position: -2px -128px;
+}
+
+.toolbar-btn-icon-duplicate {
+    background-position: -977px -126px;
+}
+
+.toolbar-btn-icon-edit {
+    background-position: -79px 43px;
+}
+
+.toolbar-btn-icon-delete {
+    background-position: -2px -52px;
+}
+
+.toolbar-btn-icon-refresh {
+    background-position: -127px -202px;
+}
+
+.toolbar-btn-icon-import {
+    background-position: -127px -128px;
+}
+
+.toolbar-btn-icon-export {
+    background-position: -177px -128px;
+}
+
+.toolbar-btn-icon-tem {
+    background-position: -27px -53px;
+}
+
+.toolbar-btn-icon-down {
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    background-position-x: right;
+    background-position-y: center;
+}
+
+.toolbar-slipbutton-text {
+    margin: 0 8px;
+}
+
+.toolbar-separator {
+    display: inline-block;
+    border-right: 1px solid #1882ae;
+    height: 100%;
+    margin-left: 1px;
+}
+
+.grid {
+    overflow: auto;
+    /*background-color: #999;*/
+    /*css thêm*/
+    overflow: auto;
+    position: absolute;
+    top: 44px;
+    right: 8px;
+    bottom: 61px;
+    left: 8px;
+}
+
+.grid-content {
+}
+
+.grid-header {
+    width: 100%;
+    min-width: max-content;
+    height: 65px;
+    background-color: #f0f0f0;
+    border-top: 1px solid #e1e1e1;
+    border-left: 1px solid #e1e1e1;
+    display: flex;
+    font-size: 13px;
+}
+
+.grid-header-column {
+    width: auto;
+    padding: 0;
+    border-right: 1px solid #ccc;
+    /* padding: 0;
+    border-right: 1px solid #ccc;
+    padding-right: 2px !important;
+    background-color: #f0f0f0 !important; */
+}
+/* check */
+.grid-header-checkcolumn {
+    width: 40px;
+    height: 100%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid #ccc;
+}
+
+.grid-header-checkcolumn-icon {
+    height: 16px;
+    width: 19px;
+    display: inline-block;
+    background-image: url(/Content/Image/ImgContent/common-icon.png);
+    background-repeat: no-repeat;
+    background-position: 0px -76px;
+}
+/* sku */
+.grid-header-column-suk {
+    width: 100px;
+    height: 100%;
+}
+
+.grid-header-column-text {
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+}
+
+.grid-header-column-option-input {
+    display: flex;
+}
+
+.condition-search {
+    width: 34px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+.nomal-condition-search {
+}
+
+.grid-header-column-input {
+    width: calc(100% - 34px);
+    max-width: inherit;
+    border: 1px solid #ccc;
+}
+
+    .grid-header-column-input:focus {
+        border: 1px solid #5aa9ff;
+        outline: none;
+    }
+/* tên hàng hóa */
+.grid-header-column-productname {
+    width: var(--width-col-productname);
+}
+/* nhóm hàng hóa */
+.grid-header-column-groupproduct {
+    width: var(--width-col-groupproduct);
+}
+/* đơn vị tính */
+.grid-header-column-counter {
+    width: var(--width-col-counter);
+}
+/* giá bán trung bình */
+.grid-header-column-price {
+    width: var(--width-col-price);
+}
+/* hiển thị trên màn hình bán */
+.grid-header-column-displayscreen {
+    width: var(--width-col-displayscreen);
+}
+
+.grid-header-column-combobox-input {
+    display: inline-flex;
+}
+
+.grid-header-column-select-input {
+    width: calc(100% - 24px);
+    border: 1px solid #ccc;
+    border-right: none;
+    padding: 3px 5px;
+}
+
+    .grid-header-column-select-input:focus {
+        border: 1px solid #ccc;
+        border-right: none;
+        outline: none;
+    }
+
+.grid-header-column-condition {
+    width: 24px;
+    height: 32px;
+    display: block;
+    background-image: url(/Content/Image/ImgContent/arrow-down-line.png);
+    background-color: white;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: 7px 13px;
+    border: 1px solid #ccc;
+    border-left: none;
+}
+/* loại hàng hóa */
+.grid-header-column-category {
+    width: var(--width-col-category);
+}
+/* trạng thái */
+.grid-header-column-status {
+    width: var(--width-col-status);
+}
+
+/* Grid body */
+.grid-body {
+    /*flex-direction: column;*/
+    font-size: 13px;
+    /*css thêm*/
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 64px;
+    bottom: 0px;
+    border-left: 1px solid #e1e1e1;
+    border-top: 1px solid #e1e1e1;
+}
+
+.grid-body-row {
+    height: 35px;
+    background-color: #fff;
+    border-left: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+}
+
+.grid-body-row-odd {
+    background-color: #fff;
+}
+
+.grid-body-row-even {
+    background-color: rgb(246, 246, 246);
+}
+
+.grid-body-colum {
+    height: 100%;
+    border-right: 1px solid #ccc;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+}
+/* body: check */
+.grid-body-colum-checkbox {
+    width: var(--width-col-check);
+    height: 100%;
+    border-right: 1px solid #ccc;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.grid-body-checkbox-icon {
+    width: 17px;
+    height: 16px;
+    display: inline-block;
+    background-image: url(/Content/Image/ImgContent/common-icon.png);
+    background-repeat: no-repeat;
+    background-position: -1px -76px;
+}
+/* body: sku */
+.grid-body-colum-sku {
+    width: var(--width-col-sku);
+}
+/* body: tên hàng hóa */
+.grid-body-colum-productname {
+    width: var(--width-col-productname);
+}
+
+    .grid-body-colum-productname > a {
+        color: #007abc;
+        text-decoration: none;
+    }
+/* body: nhóm hàng hóa */
+.grid-body-colum-groupproduct {
+    width: var(--width-col-groupproduct);
+}
+/* body: đơn vị tính */
+.grid-body-colum-counter {
+    width: var(--width-col-counter);
+}
+/* body: giá bán trung bình */
+.grid-body-colum-price {
+    width: var(--width-col-price);
+}
+/* body: hiển thị trên màn hình bán */
+.grid-body-colum-displayscreen {
+    width: var(--width-col-displayscreen);
+}
+/* body: loại hàng */
+.grid-body-colum-category {
+    width: var(--width-col-category);
+}
+/* body: trạng thái */
+.grid-body-colum-status {
+    width: var(--width-col-status);
+}
+
+.taskbar {
+    height: 53px;
+    background-color: #fff;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    position: absolute
+}
+
+/* ===================================== CONTENT PRODUCT DETAIL ========================================== */
+.content-product-detail {
+    display: none;
+}
+/*Content product detail : Top Toolbar*/
+.toptoolbar {
+    height: 52px;
+    width: 100%;
+    background-color: white;
+    border-bottom: 1px solid #e5e6eb;
+    left: 0;
+    top: 0;
+    display: flex;
+    color: white;
+    align-items: center;
+    padding: 8px;
+}
+
+.toolbar-detail-button {
+    width: auto;
+    height: 100%;
+    line-height: initial;
+    border: 1px solid #026b97;
+    margin-right: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 7px;
+    color: #026b97;
+}
+
+.first-button {
+    background-color: #026b97;
+    margin-left: 4px;
+}
+
+    .first-button:hover {
+        background-color: #1882ae;
+    }
+
+.toolbar-detail-button-icon {
+    display: inline-block;
+    height: 18px;
+    width: 16px;
+    margin-right: 3px;
+    background-image: url(Image/ImgContent/common-icon.png);
+    background-repeat: no-repeat;
+}
+
+.toolbar-icon-add {
+    background-position: -327px -126px;
+}
+
+.toolbar-icon-saveduplicate {
+    background-position: -953px -126px;
+}
+
+.toolbar-icon-saveadd {
+    background-position: -25px -126px;
+}
+
+.toolbar-icon-cancel {
+    background-position: -251px -126px;
+}
+
+.toolbar-detail-button-text {
+    padding: 0px 5px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.first-button-text {
+    color: white;
+}
+
+.last-button {
+    border: 1px solid white;
+}
+
+    .last-button:hover {
+        border: 1px solid #026b97;
+        color: #026b97;
+    }
+
+.toolbar-detail-button:hover {
+    color: #3cbced;
+}
+/*Content product detail : Product content*/
+.productcontent {
+    left: 8px;
+    right: 8px;
+    bottom: 68px;
+    position: absolute;
+    overflow: auto;
+    top: 60px;
+    background-color: white;
+    padding: 8px;
+    color: #404040;
+}
+
+.product-type-detail {
+    margin-bottom: 17px;
+    font-size: 13px;
+}
+
+.content-group-lable {
+    height: 26px;
+    padding: 6px 0px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #757575;
+    margin-top: 1px;
+    white-space: nowrap;
+}
+
+.content-status-option {
+    height: 32px;
+    width: 100%;
+    margin-left: 8px;
+    margin: 21px 0px 7px 0px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.content-group-lable {
+    height: 26px;
+    padding: 6px 0px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #757575;
+    margin-top: 1px;
+    white-space: nowrap;
+}
+
+.row-area {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    margin: 15px 0px 8px 8px;
+}
+
+.row-input-textarea {
+    border-radius: 3px;
+    height: 80px;
+    width: 463px;
+    border-color: #ccc;
+    resize: none;
+}
+
+.row-detail {
+    height: 35px;
+    width: 100%;
+    margin: 4px 8px 8px 8px;
+    display: flex;
+    font-size: 13px;
+    align-items: center;
+}
+
+.row-detail-title {
+    width: 135px;
+    /*padding: 6px 5px 0px 0px;*/
+    color: #212121;
+    display: flex;
+    white-space: nowrap;
+}
+
+.status-toption-radio {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 127px;
+    margin-right: 13px;
+}
+
+.status-toption-radio-text {
+    margin-left: 4px;
+}
+
+.row-option-text {
+    color: #000000;
+    margin-left: 4px;
+    white-space: nowrap;
+}
+
+.row-input-div-productname {
+    width: 265px;
+    height: 100%;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    display: flex;
+}
+
+.row-detail-input {
+    height: 100%;
+    width: 100%;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 10px;
+}
+
+.row-detail-input-option {
+    width: 215px;
+}
+
+.row-detail-input-error {
+    width: 24px;
+    height: 100%;
+    background-image: url(Image/ImgContent/exclamation.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    display: none;
+}
+
+    .row-detail-input-error:after {
+        content: attr(data-title);
+        position: absolute;
+        top: 23px;
+        left: 15px;
+        background: #ec4949;
+        color: white;
+        padding: 8px;
+        border: 1px solid #eee;
+        opacity: 0;
+        transition: 0.5s opacity;
+        width: auto;
+        height: auto;
+        white-space: nowrap;
+        display: flex;
+        border-radius: 5px;
+    }
+
+/* Nhóm hàng hóa */
+.row-input-div {
+    width: 265px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    display: flex;
+    height: 35px;
+    position: relative;
+}
+
+.row-detail-input-cbobutton {
+    cursor: pointer;
+    width: 24px;
+    height: 100%;
+    background-image: url(/Content/Image/ImgContent/arrow-down-line.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.row-detail-input-addbutton {
+    cursor: pointer;
+    width: 24px;
+    height: 100%;
+    border-left: 1px solid #ccc;
+    background-image: url(/Content/Image/ImgContent/quick-add.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.input-list-option {
+    display: none;
+    width: 265px;
+    height: 300px;
+    overflow: auto;
+    background-color: white;
+    list-style-type: none;
+    font-family: Roboto;
+    box-shadow: 0px 2px 0px 3px #eee9e9;
+    border-radius: 2px;
+    position: absolute;
+    top: 35px;
+    left: 0;
+    z-index: 2;
+}
+
+.input-list-option-block {
+    list-style-type: none;
+    padding: 0px;
+    font-weight: 400;
+    line-height: 22px;
+    margin: 0px;
+}
+
+    .input-list-option-block li {
+        background-color: #ffffff;
+        padding: 2px 4px;
+        cursor: pointer;
+    }
+
+        .input-list-option-block li:hover {
+            background-color: #026b97;
+            color: #ffffff;
+        }
+
+.row-detail-title-tip {
+    height: 16px;
+    width: 16px;
+    margin: 2px 0px 0px 7px;
+    background-image: url(/Content/Image/ImgContent/common-icon.png);
+    background-repeat: no-repeat;
+    background-position: -177px -177px;
+}
+
+.row-input-div-halfwidth {
+    width: 130px;
+}
+
+.row-detail-input-number {
+    text-align: right;
+}
+
+#txtcounterproduct {
+    width: 239px;
+}
+
+.row-detail-firstquantity {
+    display: flex;
+}
+
+.row-detail-input-tip {
+    padding: 5px 10px;
+}
+
+.row-input-div-manyinput {
+    width: auto;
+    height: 100%;
+    display: flex;
+}
+
+.row-input-div-manyinput-content {
+    width: 145px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-right: 14px;
+    display: flex;
+}
+
+.row-input-div-manyinput-content-title {
+    height: 100%;
+    width: 75px;
+    padding: 8px 5px 0px 8px;
+    background-color: #f0f0f0;
+    white-space: nowrap;
+    border-right: 1px solid #ccc;
+}
+
+.row-input-div-manyinput-content-input {
+    height: 100%;
+    width: 68px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    text-align: right;
+}
+
+.row-display-option {
+    height: 35px;
+    width: 100%;
+    margin-left: 8px;
+    padding-top: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.row-option-text {
+    color: #000000;
+    margin-left: 4px;
+    margin-top: 2px;
+    white-space: nowrap;
+}
+
+.row-detail-title-tip {
+    height: 16px;
+    width: 16px;
+    margin: 2px 0px 0px 7px;
+    background-image: url(/Content/Image/ImgContent/common-icon.png);
+    background-repeat: no-repeat;
+    background-position: -177px -177px;
+}
+
+/* Thông tin thuộc tính */
+.row-detail-property {
+    min-height: 35px;
+    height: auto !important;
+}
+
+.input-manyinput-property {
+    width: auto;
+    min-width: 400px;
+}
+
+.input-title-property {
+    width: 140px;
+}
+
+.row-input-property-content {
+    height: 100%;
+    width: auto;
+    max-width: 600px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.input-colour-property {
+    width: 200px;
+    text-align: left;
+    height: 35px;
+    border: none;
+    padding: 5px 10px;
+}
+
+.input-property-list {
+    padding-left: 0px;
+    margin-bottom: 0px;
+}
+
+.input-property-tag-item {
+    cursor: pointer;
+    color: white;
+    background-color: #026b97;
+    padding: 4px;
+    margin: 4px;
+    display: inline-block;
+    border-radius: 2px;
+}
+
+.input-property-tag-item-content {
+    display: flex;
+}
+
+.input-property-tag-item-dispose {
+    height: 12px;
+    width: 12px;
+    margin: 4px 0px 0px 4px;
+    background-image: url(/Content/Image/ImgContent/icon-delete.png);
+    background-repeat: no-repeat;
+}
+
+.detail-product-div {
+    height: 230px;
+    width: 100%;
+    display: flex;
+    margin-left: 8px;
+}
+
+.detail-product-table {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    margin: 0px 10px;
+    border: 1px solid #ccc;
+    font-size: 13px;
+}
+
+.detail-product-table-header {
+    height: 32px;
+    width: 100%;
+    display: flex;
+    background-color: #f0f0f0;
+}
+
+.pro-detail-row-column {
+    height: 100%;
+    min-width: 150px;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: flex;
+}
+
+.pro-detail-header-column {
+    height: 100%;
+    min-width: 150px;
+    border-right: 1px solid #ccc;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ccc;
+    padding: 7px 10px 6px 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.pro-detail-header-productname {
+    min-width: 230px;
+    width: 897px;
+}
+
+.pro-detail-header-sku {
+    width: 150px;
+}
+
+.pro-detail-header-barcode {
+    width: 150px;
+}
+
+.pro-detail-header-importprice {
+    width: 150px;
+}
+
+.pro-detail-header-price {
+    width: 160px;
+}
+
+.table-detail-task-copy {
+    cursor: pointer;
+    min-width: 40px;
+    width: 40px;
+    background-image: url(/Content/Image/ImgContent/copy-down.png);
+    background-repeat: no-repeat;
+    background-position: 13px 8px;
+}
+
+.non-icon {
+    background-image: none;
+}
+
+.table-detail-task-delete {
+    cursor: pointer;
+    min-width: 50px;
+    width: 50px;
+    padding: 8px;
+}
+
+.detail-product-table-row {
+    height: 32px;
+    display: flex;
+}
+
+.pro-detail-row-column-input {
+    height: 100%;
+    width: 100%;
+    padding: 7px 10px 6px 6px;
+    border: none;
+    border-radius: 3px;
+}
+
+.row-column-input-price-option {
+    height: 100%;
+    width: 38px !important;
+    cursor: pointer;
+    background-image: url(/Content/Image/ImgContent/common-icon.png);
+    background-repeat: no-repeat;
+    background-position: -1872px -119px;
+}
+
+.table-detail-task-delete-icon {
+    height: 16px;
+    width: 25px;
+    background-image: url(/Content/Image/ImgContent/common-icon.png);
+    background-repeat: no-repeat;
+    background-position: 7px -2px;
+}
+
+.row-image {
+    width: 100%;
+    height: 180px;
+    display: flex;
+    margin: 8px 0px 8px 8px;
+}
+
+.row-input-image {
+    height: 100%;
+    width: 200px;
+    border: 1px dashed #5fa2dd;
+}
+
+.row-input-image-select {
+    height: 30px;
+    width: 100%;
+    color: #9e9e9e;
+    font-weight: 600;
+    padding: 2px 5px;
+}
+
+.row-input-image-select-button {
+    border: 1px solid #ccc;
+    padding: 0px 4px;
+    cursor: pointer;
+    cursor: pointer;
+    float: right;
+    display: flex;
+    height: 100%;
+    align-items: center;
+}
+
+.row-input-image-select-button-icon {
+    margin-right: 4px;
+    height: 16px;
+    width: 16px;
+    background-image: url(/Content/Image/ImgContent/common-icon.png);
+    background-repeat: no-repeat;
+    background-position: -76px -178px;
+}
+
+.row-input-image-display {
+    height: 118px;
+    width: 100%;
+}
+
+.row-input-image-select-option {
+    height: 30px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    color: white;
+    justify-content: center;
+}
+
+.row-input-image-upload {
+    height: 25px;
+    width: 40px;
+    background-color: #026b97;
+    border: 1px solid #026b97;
+    border-radius: 3px;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+    .row-input-image-upload span {
+        display: flex;
+        justify-content: center;
+        color: #fff;
+        font-weight: 500;
+    }
+
+.row-input-image-cancel {
+    background-color: #ffffff;
+    background-image: url(/Content/Image/ImgContent/common-icon.png);
+    background-repeat: no-repeat;
+    background-position: -241px -124px;
+}
+
+.row-input-image-explane {
+    height: 100%;
+    width: auto;
+    color: #9e9e9e;
+    margin: 10px 15px;
+}
+
+/*Content product detail : Bottom toolbar*/
+.bottomtoolbar {
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    height: 60px;
+    background-color: white;
+    position: absolute;
+    padding: 12px 12px 12px 8px;
+    border-top: 1px solid #e5e6eb;
+    display: flex;
+    align-items: center;
+}
+
+/* ===================================== Vùng lựa chọn điều kiện lọc ========================================== */
+/* CSS chung cho điều kiện lọc */
+.filter-option {
+    height: auto;
+    background-color: white;
+    display: none;
+    position: absolute;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-shadow: 1px 2px 5px 1px #CCC;
+    font-size: 13px;
+}
+
+.combobox-shop-option {
+    width: 205px;
+    display: none;
+}
+
+.combobox-account-option {
+    width: 182px;
+    display: none;
+}
+
+.filter-option-list {
+    width: 100%;
+    height: 100%;
+    list-style-type: none;
+    margin: 0px;
+    padding: 1px 0px;
+}
+
+.filter-option-item {
+    height: 32px;
+    padding-left: 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin: 0px 1px;
+    font-size: 13px;
+}
+
+    .filter-option-item:hover {
+        background-color: #026b97;
+        color: #ffffff;
+    }
+
+.filter-option-item-icon {
+}
+/* Điều kiện lọc thường */
+.filter-nomal-option {
+    width: 124px;
+}
+
+.filter-option-item-nomal {
+}
+/* Điều kiện lọc cho giá */
+.filter-price-option {
+    min-height: 162px;
+    height: auto;
+    width: 160px;
+    background-color: white;
+    display: none;
+    position: absolute;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-shadow: 1px 2px 5px 1px #CCC;
+}
+
+.filter-option-item-price {
+    margin: 0;
+}
+
+.filter-option-item-icon-price {
+    margin-top: 0px;
+}
+/* Hiển thị trên màn hình bán*/
+.filter-displayonscreen-option {
+    width: 173px;
+}
+/* Loại hàng hóa*/
+.filter-category-option {
+    width: 120px;
+}
+/* Trạng thái*/
+.filter-status-option {
+    width: 135px;
+}
