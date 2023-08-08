@@ -31,6 +31,26 @@ class ProductJS {
             $('.combobox-account-option').css('display', 'none');
         });
 
+        // Sự kiện nhấn nút check tất cả
+        $('.grid-header-checkcolumn-icon').on('click', function () {
+            if ($('.grid-header-checkcolumn-icon').hasClass('grid-body-row-checkbox-icon-checked')) {
+                $('.grid-header-checkcolumn-icon').removeClass('grid-body-row-checkbox-icon-checked');
+                $('.grid-body-checkbox-icon').removeClass('grid-body-row-checkbox-icon-checked');
+            } else {
+                $('.grid-header-checkcolumn-icon').addClass('grid-body-row-checkbox-icon-checked');
+                $('.grid-body-checkbox-icon').addClass('grid-body-row-checkbox-icon-checked');
+            }
+        });
+
+        // Sự kiện nhấn từng nút check
+        $('.grid-body-checkbox-icon').click(function () {
+            if ($(this).hasClass('grid-body-row-checkbox-icon-checked')) {
+                $(this).removeClass('grid-body-row-checkbox-icon-checked');
+            } else {
+                $(this).addClass('grid-body-row-checkbox-icon-checked');
+            }
+        });
+
         // Ẩn - hiện các điều kiện lọc thường
         $('.nomal-condition-search').on('click', function () {
             // ẩn các điều kiện lọc khác

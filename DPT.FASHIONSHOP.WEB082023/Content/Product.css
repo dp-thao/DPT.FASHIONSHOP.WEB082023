@@ -384,7 +384,7 @@
 }
 
 .content-product {
-    display: block;
+    display: none;
 }
 
 .toolbar {
@@ -527,6 +527,11 @@
     background-repeat: no-repeat;
     background-position: 0px -76px;
 }
+.grid-body-row-checkbox-icon-checked {
+    background-image: url(/Content/Image/ImgContent/check.png) !important;
+    background-repeat: no-repeat;
+    background-position: -1px -2px !important;
+}
 /* sku */
 .grid-header-column-suk {
     width: 100px;
@@ -628,9 +633,7 @@
 
 /* Grid body */
 .grid-body {
-    /*flex-direction: column;*/
     font-size: 13px;
-    /*css thêm*/
     height: 100%;
     width: 100%;
     position: absolute;
@@ -642,6 +645,7 @@
 
 .grid-body-row {
     height: 35px;
+    width: max-content;
     background-color: #fff;
     border-left: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
@@ -733,7 +737,7 @@
 
 /* ===================================== CONTENT PRODUCT DETAIL ========================================== */
 .content-product-detail {
-    display: none;
+    display: block;
 }
 /*Content product detail : Top Toolbar*/
 .toptoolbar {
@@ -854,6 +858,7 @@
     display: flex;
     align-items: center;
     white-space: nowrap;
+    display: none;
 }
 
 .content-group-lable {
@@ -930,6 +935,7 @@
     border: none;
     border-radius: 3px;
     padding: 5px 10px;
+    outline: none;
 }
 
 .row-detail-input-option {
@@ -1142,6 +1148,7 @@
     height: 35px;
     border: none;
     padding: 5px 10px;
+    outline: none;
 }
 
 .input-property-list {
@@ -1273,6 +1280,7 @@
     padding: 7px 10px 6px 6px;
     border: none;
     border-radius: 3px;
+    outline: none;
 }
 
 .row-column-input-price-option {

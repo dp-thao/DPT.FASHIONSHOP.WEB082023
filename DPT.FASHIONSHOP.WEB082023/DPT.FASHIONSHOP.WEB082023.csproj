@@ -185,6 +185,7 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\Image\ImgContent\arrow-down-line.png" />
     <Content Include="Content\Image\ImgContent\arrow-down-white.png" />
+    <Content Include="Content\Image\ImgContent\check.png" />
     <Content Include="Content\Image\ImgContent\common-icon.png" />
     <Content Include="Content\Image\ImgContent\copy-down.png" />
     <Content Include="Content\Image\ImgContent\exclamation.png" />

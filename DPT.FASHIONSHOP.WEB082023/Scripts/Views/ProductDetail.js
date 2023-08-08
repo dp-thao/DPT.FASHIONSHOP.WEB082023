@@ -3,6 +3,11 @@ $(document).ready(function () {
 
 })
 
+//Biến chứa danh sách các thẻ tag màu sắc
+var colorTagList = [];
+// Chuỗi màu sắc khi thêm mới hàng hóa
+var productAddColor = "";
+
 class ProductDetail {
     constructor() {
         this.initEvents();
@@ -52,6 +57,29 @@ class ProductDetail {
             $('#divcounteroption').toggle();
             productDetail.getCalculationUnit();
         });
+
+        // Sự kiện chọn Nhóm hàng hóa
+        $('.input-category-option-block').on('click', 'li', function () {  
+            var productGroupId = $(this).attr('unitvalue');
+            var productGroupName = $(this).text();
+            $('#txtproductcategory').val(productGroupName);
+        });
+
+        // Sự kiện chọn Đơn vị tính
+        $('.input-counter-option-block').on('click', 'li', function () {
+            var calculationUnitID = $(this).attr('unitvalue');
+            var calculationUnitName = $(this).text();
+            $('#txtcounterproduct').val(calculationUnitName);
+        });
+
+        // Thêm thẻ tag Color sau khi nhấn enter
+        $('#txtColorInput').keypress(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                alert('Bạn vừa nhấn phím "enter" trong thẻ input');
+                createNoteColor();
+            }
+        });
     }
 
     // ======================== Thao tác với dữ liệu ========================
@@ -66,7 +94,8 @@ class ProductDetail {
                 if (response.Data.length > 0) {
                     var data = response.Data;
                     $.each(data, function (index, item) {
-                        $('.input-category-option-block').append('<li>' + item["ProductGroupName"] + '</li>');
+                        //$('.input-category-option-block').append('<li>' + item["ProductGroupName"] + '</li>');
+                        $('.input-category-option-block').append(`<li unitvalue="${item["ProductGroupID"]}">${item["ProductGroupName"]}</li>`);
                     });
                 }
             },
@@ -104,3 +133,27 @@ class ProductDetail {
 }
 
 var productDetail = new ProductDetail();
+
+// ======================== Hàm bổ trợ ========================
+function createNoteColor() {
+    //Tạo mảng chứa các giá trị đã có
+    var colorValue = $('#txtColorInput').val().replace(/\\/g, '');
+    if (colorTagList.includes(colorValue) === false) {
+        // Đẩy giá trị vào mảng
+        colorTagList.push(colorValue);
+        // Set danh sách ColorTag khi thêm mới
+        productAddColor = "";
+        $.each(colorTagList, function (index, item) {
+            productAddColor += (item.concat(','));
+        });
+        // Tạo thẻ tag
+        var colorNode =
+            '<li class="input-property-tag-item">'
+            + '<div class="input-property-tag-item-content">'
+            + '<span>' + colorValue + '</span>'
+            + '<span class="input-property-tag-item-dispose"></span>'
+            + '</div></li>';
+        $('#inputcolorlist').append(colorNode);
+        $('#txtColorInput').val('');
+    }
+}
