@@ -7,6 +7,8 @@ $(document).ready(function () {
 var colorTagList = [];
 // Chuỗi màu sắc khi thêm mới hàng hóa
 var productAddColor = "";
+//Biến chứa danh sách các thẻ tag size
+var sizeTagList = [];
 
 class ProductDetail {
     constructor() {
@@ -76,9 +78,106 @@ class ProductDetail {
         $('#txtColorInput').keypress(function (event) {
             var keycode = (event.keyCode ? event.keyCode : event.which);
             if (keycode == '13') {
-                alert('Bạn vừa nhấn phím "enter" trong thẻ input');
-                createNoteColor();
+                productDetail.createNoteColor();
             }
+        });
+
+        // Thêm thẻ tag Size sau khi nhấn enter
+        $('#txtSizeInput').keypress(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                productDetail.createNoteSize();
+            }
+        });
+    }
+    // ================================================
+    // Hàm tạo note Color
+    createNoteColor() {
+        //Tạo mảng chứa các giá trị đã có
+        var colorValue = $('#txtColorInput').val().replace(/\s+/g, ''); // .replace(): remove all the spaces in entire string use replace
+        if (colorTagList.includes(colorValue) === false) {
+            // Đẩy giá trị vào mảng
+            colorTagList.push(colorValue);
+            // Set danh sách ColorTag khi thêm mới
+            productAddColor = "";
+            $.each(colorTagList, function (index, item) {
+                productAddColor += (item.concat(','));
+            });
+            // Tạo thẻ tag
+            var colorNode =
+            `<li class="input-property-tag-item" colortagtext=${colorValue} onclick=productDetail.removeColorTag(this,'${colorValue}')>
+                <div class="input-property-tag-item-content">
+                    <span>${colorValue}</span>
+                    <span class="input-property-tag-item-dispose"></span>
+                </div>
+            </li>`;
+            $('#inputcolorlist').append(colorNode);
+            $('#txtColorInput').val('');
+        }
+    }
+
+    // Hàm xóa note Color
+    removeColorTag(element, colorValue) {
+        // Xóa màu trong danh sách
+        var colorIndex = colorTagList.indexOf(colorValue);
+        if (colorIndex > -1) { // only splice array when item is found
+            colorTagList.splice(colorIndex, 1); // 2nd parameter means remove one item only
+        }
+        // render lại note
+        $('#inputcolorlist').empty();
+        $.each(colorTagList, function (index, item) {
+            var colorNode =
+                `<li class="input-property-tag-item" colortagtext=${item} onclick=productDetail.removeColorTag(this,'${item}')>
+                    <div class="input-property-tag-item-content">
+                        <span>${item}</span>
+                        <span class="input-property-tag-item-dispose"></span>
+                    </div>
+                </li>`;
+            $('#inputcolorlist').append(colorNode);
+            $('#txtColorInput').val('');
+        });
+    }
+
+    // Hàm tạo note Size
+    createNoteSize() {
+        //Tạo mảng chứa các giá trị đã có
+        var sizeValue = $('#txtSizeInput').val().replace(/\\/g, '');
+        if (sizeTagList.includes(sizeValue) == false) {
+            // Thêm giá trị size vào mảng
+            sizeTagList.push(sizeValue);
+            // Tạo thẻ tag size
+            var sizeNote = 
+                `<li class="input-property-tag-item" onclick=productDetail.removeSizeTag(this,'${sizeValue}')>
+                    <div class="input-property-tag-item-content">
+                        <span>${sizeValue}</span>
+                        <span class="input-property-tag-item-dispose"></span>
+                    </div>
+                </li>`;
+
+            $('#inputsizelist').append(sizeNote);
+            $('#txtSizeInput').val('');
+        }
+    }
+
+    // Hàm xóa note Size
+    removeSizeTag(element, sizeValue) {
+        // Xóa size trong mảng
+        var sizeIndex = sizeTagList.indexOf(sizeValue);
+        if (sizeIndex > -1) {
+            sizeTagList.splice(sizeIndex, 1);
+        }
+        // render lại size
+        $('#inputsizelist').empty();
+        $.each(sizeTagList, function (index, item) {
+            var sizeNote =
+                `<li class="input-property-tag-item" onclick=productDetail.removeSizeTag(this,'${item}')>
+                    <div class="input-property-tag-item-content">
+                        <span>${item}</span>
+                        <span class="input-property-tag-item-dispose"></span>
+                    </div>
+                </li>`;
+            $('#inputsizelist').append(sizeNote);
+            $('#txtSizeInput').val('');
         });
     }
 
@@ -107,6 +206,7 @@ class ProductDetail {
             }
         });
     }
+
     // Hàm lấy danh sách đơn vị tính
     // date: 06/08/2023
     getCalculationUnit() {
@@ -135,25 +235,3 @@ class ProductDetail {
 var productDetail = new ProductDetail();
 
 // ======================== Hàm bổ trợ ========================
-function createNoteColor() {
-    //Tạo mảng chứa các giá trị đã có
-    var colorValue = $('#txtColorInput').val().replace(/\\/g, '');
-    if (colorTagList.includes(colorValue) === false) {
-        // Đẩy giá trị vào mảng
-        colorTagList.push(colorValue);
-        // Set danh sách ColorTag khi thêm mới
-        productAddColor = "";
-        $.each(colorTagList, function (index, item) {
-            productAddColor += (item.concat(','));
-        });
-        // Tạo thẻ tag
-        var colorNode =
-            '<li class="input-property-tag-item">'
-            + '<div class="input-property-tag-item-content">'
-            + '<span>' + colorValue + '</span>'
-            + '<span class="input-property-tag-item-dispose"></span>'
-            + '</div></li>';
-        $('#inputcolorlist').append(colorNode);
-        $('#txtColorInput').val('');
-    }
-}
