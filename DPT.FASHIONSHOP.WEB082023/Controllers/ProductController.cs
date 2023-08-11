@@ -55,5 +55,12 @@ namespace DPT.FASHIONSHOP.WEB082023.Controllers
             // Chuyển đối tượng trả về thành kiểu JSON
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult AddNewProduct()
+        {
+            AjaxResult result = new AjaxResult();
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

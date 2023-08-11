@@ -59,6 +59,21 @@ namespace DPT.DL
             }
             return listProduct;
         }
+        
+        public void AddNewProduct(Product product)
+        {
+            // Mở chuỗi kết nối
+            _sqlConnection = new SqlConnection(_connectionString);
+            _sqlCommand = _sqlConnection.CreateCommand();
+            _sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+            _sqlCommand.CommandText = "[dbo].[Proc_InsertProduct]";
+            _sqlCommand.Parameters.AddWithValue("", product.ProductName);
+            if (_sqlConnection.State == ConnectionState.Closed)
+            {
+                _sqlConnection.Open();
+            }
+            
+        }
         #endregion
     }
 }

@@ -11,6 +11,10 @@ var colorTagList = [];
 var productAddColor = "";
 //Biến chứa danh sách các thẻ tag size
 var sizeTagList = [];
+// Biến nhận biết đơn vị tính nào đang được lựa chọn
+var selectedCalculationUnit = null;
+// Biến nhận biết nhóm hàng hóa nào đang được lựa chọn
+var selectedGroupProduct = null;
 
 class ProductDetail {
     constructor() {
@@ -63,15 +67,15 @@ class ProductDetail {
         });
 
         // Sự kiện chọn Nhóm hàng hóa
-        $('.input-category-option-block').on('click', 'li', function () {  
-            var productGroupId = $(this).attr('unitvalue');
+        $('.input-category-option-block').on('click', 'li', function () {
+            selectedGroupProduct = $(this).attr('unitvalue'); // Biến nhận biết nhóm hàng hóa đang được chọn
             var productGroupName = $(this).text();
             $('#txtproductcategory').val(productGroupName);
         });
 
         // Sự kiện chọn Đơn vị tính
         $('.input-counter-option-block').on('click', 'li', function () {
-            var calculationUnitID = $(this).attr('unitvalue');
+            selectedCalculationUnit = $(this).attr('unitvalue'); // Mã đơn vị tính đang được chọn
             var calculationUnitName = $(this).text();
             $('#txtcounterproduct').val(calculationUnitName);
         });
@@ -100,11 +104,11 @@ class ProductDetail {
         // Sự kiện nhấn vào input Giá mua, Giá bán, Tồn kho ban đầu, Định mức tồn kho tối thiểu, Định mức tồn kho tối đa sẽ select text trong input
         $('.row-detail-input-number').on('click', function () {
             $(this).select();
-        }); 
+        });
 
         // Sự kiện nhấn vào input Giá bán,  Giá bán, Tồn kho ban đầu, Định mức tồn kho tối thiểu, Định mức tồn kho tối đa sẽ
-        $('#txtproductimportprice').on('keypress', onlyNumberInput); 
-        $('#txtproductsellprice').on('keypress', onlyNumberInput); 
+        $('#txtproductimportprice').on('keypress', onlyNumberInput);
+        $('#txtproductsellprice').on('keypress', onlyNumberInput);
         $('#txtfirstquantity').on('keypress', onlyNumberInput);
         $('#txtminquantity').on('keypress', onlyNumberInput);
         $('#txtmaxquantity').on('keypress', onlyNumberInput);
@@ -112,13 +116,7 @@ class ProductDetail {
         // Sự kiện nhập vào là tiền
 
         $('#txtproductimportprice').on('keyup', function () {
-            var moneyVal = $(this).val().toString();
-            var moneyArr = moneyVal.split('');
-            var moneyNew = '';
-            for (var i = moneyArr.length - 3; i > 0; i -= 3) {
-                moneyArr.splice(i, 0, '.');
-            }
-            $(this).val(moneyArr.join(''))
+            
         });
 
         //$('.row-detail-input-number').on('keyup', function () {
@@ -138,6 +136,12 @@ class ProductDetail {
         //});
 
 
+        // Sự kiện lưu khi thêm hàng hóa
+        $('#btnProductTopSave').on('click', function () {
+            productDetail.addNewProduct();
+        });
+
+
     }
     // ================================================
     // Hàm tạo note Color
@@ -154,7 +158,7 @@ class ProductDetail {
             });
             // Tạo thẻ tag
             var colorNode =
-            `<li class="input-property-tag-item" colortagtext=${colorValue} onclick=productDetail.removeColorTag(this,'${colorValue}')>
+                `<li class="input-property-tag-item" colortagtext=${colorValue} onclick=productDetail.removeColorTag(this,'${colorValue}')>
                 <div class="input-property-tag-item-content">
                     <span>${colorValue}</span>
                     <span class="input-property-tag-item-dispose"></span>
@@ -195,7 +199,7 @@ class ProductDetail {
             // Thêm giá trị size vào mảng
             sizeTagList.push(sizeValue);
             // Tạo thẻ tag size
-            var sizeNote = 
+            var sizeNote =
                 `<li class="input-property-tag-item" onclick=productDetail.removeSizeTag(this,'${sizeValue}')>
                     <div class="input-property-tag-item-content">
                         <span>${sizeValue}</span>
@@ -324,6 +328,50 @@ class ProductDetail {
         });
     }
 
+    // Hàm lấy danh sách đơn vị tính
+    // date: 11/08/2023
+    addNewProduct() {
+        var productObj = {};
+        productObj['ProductName'] = $('#txtproductname').val();
+        productObj['SKUCode'] = $('#txtskucode').val();
+        productObj['BarCode'] = $('#txtproductbarcode').val();
+        productObj['PurchasePrice'] = $('#txtproductimportprice').val();
+        productObj['SalePrice'] = $('#txtproductsellprice').val();
+        productObj['CalculationUnitID'] = selectedCalculationUnit;
+        productObj['InitialInventoryQuantity'] = $('#txtfirstquantity').val();
+        productObj['MinQuantity'] = $('#txtminquantity').val();
+        productObj['MaxQuantity'] = $('#txtmaxquantity').val();
+        productObj['StockLocation'] = 'Kho S';
+        productObj['DisplayLocation'] = 'Kệ S';
+        productObj['Status'] = 1;
+        productObj['InActive'] = 1;
+        productObj['Description'] = $('#txtDescription').val();
+        productObj['ProductGroupID'] = selectedGroupProduct;
+        productObj['ColorTag'] = 'Đỏ';
+        productObj['SizeTag'] = 'M';
+        productObj['Image'] = 'null';
+        productObj['ProductTypeID'] = '15027954-ccc2-4c76-9128-b656ae00f755';
+        productObj['CreatedDate'] = '2023-08-11';
+        productObj['CreatedBy'] = '00000000-0000-0000-0000-000000000000';
+        // Gọi API 
+        $.ajax({
+            method: 'POST',
+            url: '/Product/AddNewProduct',
+            //dataType: 'json',
+            data: productObj,
+            success: function (response) {
+                alert('thành công');
+            },
+            false: function () {
+                alert('Thất bại');
+                console.log("Add new product: Thất bại");
+            },
+            error: function (response) {
+                alert('Lỗi');
+                console.log("Add new product: Lỗi");
+            }
+        });
+    }
 }
 
 var productDetail = new ProductDetail();
