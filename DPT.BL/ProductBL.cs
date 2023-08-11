@@ -22,11 +22,21 @@ namespace DPT.BL
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Lấy danh sách product
+        /// </summary>
+        /// <returns>Danh sách product</returns>
         public List<Product> GetAllProduct()
         {
             ProductAccess productAccess = new ProductAccess();
             List<Product> listProduct = productAccess.GetListProduct();
             return listProduct;
+        }
+
+        public void AddNewProduct(Product product)
+        {
+            ProductAccess productAccess = new ProductAccess();
+            productAccess.AddNewProduct(product);
         }
         #endregion
     }

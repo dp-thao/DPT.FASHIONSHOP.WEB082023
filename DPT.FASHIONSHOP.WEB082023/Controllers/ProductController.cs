@@ -56,10 +56,10 @@ namespace DPT.FASHIONSHOP.WEB082023.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddNewProduct()
+        public JsonResult AddNewProduct(Product product)
         {
             AjaxResult result = new AjaxResult();
-
+            productBL.AddNewProduct(product);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

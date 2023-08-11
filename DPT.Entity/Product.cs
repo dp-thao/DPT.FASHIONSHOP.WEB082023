@@ -120,7 +120,7 @@ namespace DPT.Entity
         public string CalculationUnitName { get; set; }
 
         /// <summary>
-        /// Tên loại hàng hóa - ttruy vấn theo khóa ngoại
+        /// Tên loại hàng hóa - truy vấn theo khóa ngoại
         /// </summary>
         public string ProductTypeName { get; set; }
 

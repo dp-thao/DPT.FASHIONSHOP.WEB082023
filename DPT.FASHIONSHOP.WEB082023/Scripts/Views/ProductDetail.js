@@ -71,6 +71,7 @@ class ProductDetail {
             selectedGroupProduct = $(this).attr('unitvalue'); // Biến nhận biết nhóm hàng hóa đang được chọn
             var productGroupName = $(this).text();
             $('#txtproductcategory').val(productGroupName);
+            alert(selectedGroupProduct);
         });
 
         // Sự kiện chọn Đơn vị tính
@@ -78,6 +79,7 @@ class ProductDetail {
             selectedCalculationUnit = $(this).attr('unitvalue'); // Mã đơn vị tính đang được chọn
             var calculationUnitName = $(this).text();
             $('#txtcounterproduct').val(calculationUnitName);
+            alert(selectedCalculationUnit);
         });
 
         // Thêm thẻ tag Color sau khi nhấn enter
@@ -315,7 +317,7 @@ class ProductDetail {
             success: function (response) {
                 if (response.Data.length > 0) {
                     $.each(response.Data, function (index, item) {
-                        $('.input-counter-option-block').append('<li>' + item["CalculationUnitName"] + '</li>');
+                        $('.input-counter-option-block').append(`<li unitvalue="${item["CalculationUnitID"]}">${item["CalculationUnitName"]}</li>`);
                     });
                 }
             },
@@ -334,7 +336,7 @@ class ProductDetail {
         var productObj = {};
         productObj['ProductName'] = $('#txtproductname').val();
         productObj['SKUCode'] = $('#txtskucode').val();
-        productObj['BarCode'] = $('#txtproductbarcode').val();
+        productObj['BarCode'] = '1234567';//$('#txtproductbarcode').val();
         productObj['PurchasePrice'] = $('#txtproductimportprice').val();
         productObj['SalePrice'] = $('#txtproductsellprice').val();
         productObj['CalculationUnitID'] = selectedCalculationUnit;
@@ -344,14 +346,14 @@ class ProductDetail {
         productObj['StockLocation'] = 'Kho S';
         productObj['DisplayLocation'] = 'Kệ S';
         productObj['Status'] = 1;
-        productObj['InActive'] = 1;
-        productObj['Description'] = $('#txtDescription').val();
+        productObj['InActive'] = 0;
+        productObj['Description'] = 'Mô tả';
         productObj['ProductGroupID'] = selectedGroupProduct;
         productObj['ColorTag'] = 'Đỏ';
         productObj['SizeTag'] = 'M';
-        productObj['Image'] = 'null';
+        productObj['Image'] = 'Img';
         productObj['ProductTypeID'] = '15027954-ccc2-4c76-9128-b656ae00f755';
-        productObj['CreatedDate'] = '2023-08-11';
+        productObj['CreatedDate'] = Date.now();
         productObj['CreatedBy'] = '00000000-0000-0000-0000-000000000000';
         // Gọi API 
         $.ajax({
