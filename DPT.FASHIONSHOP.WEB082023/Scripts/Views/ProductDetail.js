@@ -3,6 +3,8 @@ $(document).ready(function () {
 
 })
 
+// Chỉ số phía sau của mã hàng hóa tự sinh
+var suffixNumberCode = 1;
 //Biến chứa danh sách các thẻ tag màu sắc
 var colorTagList = [];
 // Chuỗi màu sắc khi thêm mới hàng hóa
@@ -46,7 +48,7 @@ class ProductDetail {
             $('#divcategoryoption').toggle();
             productDetail.getGroupProduct();
         });
-        // click ra ngoài Nhóm hàng hóa thì ẩn danh sách nhóm hàng hóa
+        // click ra ngoài Nhóm hàng hóa và Đơn vị tính thì ẩn danh sách nhóm hàng hóa và đơn vị tính
         $(document).on('click', function (e) {
             // nếu sự kiện gần nhất có id là cbocategoryoption thì display - none
             if (!e.target.closest('#cbocategoryoption') && !e.target.closest('#cbocounteroption')) {
@@ -89,6 +91,53 @@ class ProductDetail {
                 productDetail.createNoteSize();
             }
         });
+
+        // Sau khi nhập Tên hàng hóa và sự kiện focusout
+        $('#txtproductname').on('focusout', function () {
+            productDetail.autoCreateProductCode();
+        });
+
+        // Sự kiện nhấn vào input Giá mua, Giá bán, Tồn kho ban đầu, Định mức tồn kho tối thiểu, Định mức tồn kho tối đa sẽ select text trong input
+        $('.row-detail-input-number').on('click', function () {
+            $(this).select();
+        }); 
+
+        // Sự kiện nhấn vào input Giá bán,  Giá bán, Tồn kho ban đầu, Định mức tồn kho tối thiểu, Định mức tồn kho tối đa sẽ
+        $('#txtproductimportprice').on('keypress', onlyNumberInput); 
+        $('#txtproductsellprice').on('keypress', onlyNumberInput); 
+        $('#txtfirstquantity').on('keypress', onlyNumberInput);
+        $('#txtminquantity').on('keypress', onlyNumberInput);
+        $('#txtmaxquantity').on('keypress', onlyNumberInput);
+
+        // Sự kiện nhập vào là tiền
+
+        $('#txtproductimportprice').on('keyup', function () {
+            var moneyVal = $(this).val().toString();
+            var moneyArr = moneyVal.split('');
+            var moneyNew = '';
+            for (var i = moneyArr.length - 3; i > 0; i -= 3) {
+                moneyArr.splice(i, 0, '.');
+            }
+            $(this).val(moneyArr.join(''))
+        });
+
+        //$('.row-detail-input-number').on('keyup', function () {
+        //    //var moneyVal = $(this).val();
+        //    var p = /^[0-9\.]*$/g;
+        //    //kiểm tra nhập vào là số và có dấu chấm
+        //    if (p.test($(this).val())) {
+        //        var value = Number($(this).val().split('.').join('')).formatMoney();
+        //        if (value == 0 || value == '0') {
+        //            $(this).val('');
+        //        } else {
+        //            $(this).val(value);
+        //        }
+        //    } else {
+        //        $(this).val('');
+        //    }
+        //});
+
+
     }
     // ================================================
     // Hàm tạo note Color
@@ -181,6 +230,51 @@ class ProductDetail {
         });
     }
 
+    // Hàm sinh mã SKU tự động sau khi thêm Tên hàng hóa
+    autoCreateProductCode() {
+        // Lấy thông tin giá trị nhập vào
+        var productNameValue = $('#txtproductname').val().trim();
+        if (productNameValue != '') {
+            var skuCodeArray = ""; // mã sku
+            // Lấy chữ cái đầu và viết hoa tất cả, mặc định thêm 01 ở cuối
+            // ví dụ: tên hàng hóa: Áo polo -> AP01
+            var listCharacter = productNameValue.split(' '); // Mảng chuỗi tên hàng hóa
+            $.each(listCharacter, function (index, item) {
+                var firstCharacter = item.slice(0, 1).toUpperCase();
+                skuCodeArray += firstCharacter;
+            });
+            // Kiểm tra xem mã đã tồn tại chưa
+            var nameCode = changeStringToSlug(skuCodeArray); // Chuyển ký tự có dấu thành không dấu
+            $('#txtskucode').val(nameCode.concat('0', suffixNumberCode));
+            // Kiểm tra trùng mã. Nếu trùng thì tăng chữ số lên 1
+            productDetail.isExistProductCode();
+        }
+        else {
+            $('#txtskucode').val('');
+        }
+        // Thêm dữ liệu vào input Mã SKU
+    }
+
+    // Hàm kiểm tra mã SKU của hàng hóa đã tồn tại hay chưa
+    //date: 10/08/2023
+    isExistProductCode() {
+        var skuCode = $('#txtskucode').val().trim();
+        $.ajax({
+            type: 'POST',
+            url: '/Product/CheckSkucode',
+            dataType: 'json',
+            success: function () {
+
+            },
+            false: function () {
+                alert('Kiểm tra mã tồn tại SKU false');
+            },
+            error: function () {
+                alert('Lỗi kiểm tra mã tồn tại SKU');
+            }
+        });
+    }
+
     // ======================== Thao tác với dữ liệu ========================
     // Hàm lấy danh sách nhóm hàng hóa
     // date: 06/08/2023
@@ -235,3 +329,31 @@ class ProductDetail {
 var productDetail = new ProductDetail();
 
 // ======================== Hàm bổ trợ ========================
+// Hàm chuyển ký tự có dấu thành không giấu
+// date: 10/08/2023
+function changeStringToSlug(inputString) {
+    var slug = inputString;
+    //Đổi ký tự có dấu thành không dấu
+    slug = slug.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'A');
+    slug = slug.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'E');
+    slug = slug.replace(/i|í|ì|ỉ|ĩ|ị/gi, 'I');
+    slug = slug.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'O');
+    slug = slug.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'U');
+    slug = slug.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'Y');
+    slug = slug.replace(/đ/gi, 'D');
+    return slug;
+}
+
+// Hàm chỉ cho phép nhập số
+function onlyNumberInput(evt) {
+    var charCode = (evt.which) ? evt.which : evt.keyCode
+    if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+    return true;
+}
+
+// Hàm tự động chuyển giá trị ô nhập về định dạng tiền tệ
+// date: 10/08/2023
+function autoCurrencyInput(money) {
+
+}

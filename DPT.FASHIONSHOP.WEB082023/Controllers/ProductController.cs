@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 namespace DPT.FASHIONSHOP.WEB082023.Controllers
 {
+    [RoutePrefix("products")]
     public class ProductController : Controller
     {
         ProductBL productBL = new ProductBL();
@@ -34,6 +35,23 @@ namespace DPT.FASHIONSHOP.WEB082023.Controllers
                 result.Success = false;
                 result.Messenger = "Thất bại";
             }
+            // Chuyển đối tượng trả về thành kiểu JSON
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        ///  Hàm kiểm tra mã SKU đã tồn tại hay chưa
+        /// </summary>
+        /// <param name="skucode">Mã SKU</param>
+        /// <returns>Đối tượng Ajax kết quả thực hiện</returns>
+        /// date: 10/08/2023
+        [HttpPost]
+        [Route("{skucode}")]
+        public JsonResult CheckSkucode(string skucode)
+        {
+            AjaxResult result = new AjaxResult();
+
+
             // Chuyển đối tượng trả về thành kiểu JSON
             return Json(result, JsonRequestBehavior.AllowGet);
         }
