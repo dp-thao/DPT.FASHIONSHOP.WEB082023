@@ -87,7 +87,7 @@ namespace DPT.DL
             _sqlCommand.Parameters.AddWithValue("@Image", product.Image);
             _sqlCommand.Parameters.AddWithValue("@ProductTypeID", product.ProductTypeID);
             _sqlCommand.Parameters.AddWithValue("@CreatedDate", DateTime.Now);
-            _sqlCommand.Parameters.AddWithValue("@CreatedBy", "");
+            _sqlCommand.Parameters.AddWithValue("@CreatedBy", "00000000-0000-0000-0000-000000000000");
             if (_sqlConnection.State == ConnectionState.Closed)
             {
                 _sqlConnection.Open();

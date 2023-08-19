@@ -11,6 +11,8 @@ var colorTagList = [];
 var productAddColor = "";
 //Biến chứa danh sách các thẻ tag size
 var sizeTagList = [];
+// Biến chứa danh sách các thẻ color và size
+var colorSizeProduct = [];
 // Biến nhận biết đơn vị tính nào đang được lựa chọn
 var selectedCalculationUnit = null;
 // Biến nhận biết nhóm hàng hóa nào đang được lựa chọn
@@ -71,7 +73,7 @@ class ProductDetail {
             selectedGroupProduct = $(this).attr('unitvalue'); // Biến nhận biết nhóm hàng hóa đang được chọn
             var productGroupName = $(this).text();
             $('#txtproductcategory').val(productGroupName);
-            alert(selectedGroupProduct);
+            //alert(selectedGroupProduct);
         });
 
         // Sự kiện chọn Đơn vị tính
@@ -79,7 +81,7 @@ class ProductDetail {
             selectedCalculationUnit = $(this).attr('unitvalue'); // Mã đơn vị tính đang được chọn
             var calculationUnitName = $(this).text();
             $('#txtcounterproduct').val(calculationUnitName);
-            alert(selectedCalculationUnit);
+            //alert(selectedCalculationUnit);
         });
 
         // Thêm thẻ tag Color sau khi nhấn enter
@@ -116,9 +118,8 @@ class ProductDetail {
         $('#txtmaxquantity').on('keypress', onlyNumberInput);
 
         // Sự kiện nhập vào là tiền
-
         $('#txtproductimportprice').on('keyup', function () {
-            
+
         });
 
         //$('.row-detail-input-number').on('keyup', function () {
@@ -168,17 +169,110 @@ class ProductDetail {
             </li>`;
             $('#inputcolorlist').append(colorNode);
             $('#txtColorInput').val('');
+
+            // Giá mua
+            var purchasePrice = $('#txtproductimportprice').val();
+            // Giá bán
+            var salePrice = $('#txtproductsellprice').val();
+
+            // Tạo dòng thông tin chi tiết thuộc tính
+            var table = $('.detail-product-table-body');
+            var row = '';
+            if (sizeTagList.length == 0) {
+                // Tên hàng hóa
+                if ($('#txtproductname').val() != '') {
+                    var nameProduct = `${$('#txtproductname').val()}(${colorValue})`;
+                } else {
+                    var nameProduct = colorValue;
+                }
+                // Mã sku
+                var colorCode = colorValue.slice(0, 2).toUpperCase();
+                var skuCode = $('#txtskucode').val() + '-' + changeStringToSlug(colorCode);
+
+                row = `<div class="detail-product-table-row">
+                        <div class="pro-detail-row-column pro-detail-header-productname">
+                            <input class="pro-detail-row-column-input" type="text" value="${nameProduct}" />
+                        </div>
+                        <div class="pro-detail-row-column pro-detail-header-sku">
+                            <input class="pro-detail-row-column-input" type="text" value="${skuCode}" />
+                        </div>
+                        <div class="pro-detail-row-column pro-detail-header-barcode">
+                            <input class="pro-detail-row-column-input" type="text" />
+                        </div>
+                        <div class="pro-detail-row-column pro-detail-header-importprice">
+                            <input class="pro-detail-row-column-input pro-detail-input-number" type="text" value="${purchasePrice}" />
+                        </div>
+                        <div class="pro-detail-row-column pro-detail-header-price" title="Áp dụng chính sách giá">
+                            <input class="pro-detail-row-column-input pro-detail-input-number" type="text" value="${salePrice}" />
+                            <span class="row-column-input-price-option"></span>
+                        </div>
+                        <div class="pro-detail-row-column table-detail-task-copy" title="Sao chép giá mua, giá bán và bảng giá xuống các dòng dưới"></div>
+                        <div class="pro-detail-row-column table-detail-task-delete">
+                            <div class="table-detail-task-delete-icon"></div>
+                        </div>
+                    </div>`;
+            }
+            else {
+                $.each(sizeTagList, function (indexS, itemS) {
+                    $.each(colorTagList, function (indexC, itemC) {
+                        var colorSize = `${itemC}${itemS}`;
+                        if (colorSizeProduct.includes(colorSize) == false) {
+                            colorSizeProduct.push(colorSize);
+                            // Tên hàng hóa
+                            if ($('#txtproductname').val() != '') {
+                                var nameProduct = `${$('#txtproductname').val()}(${itemC}/${itemS})`;
+                            } else {
+                                var nameProduct = `(${itemC}/${itemS})`;
+                            }
+                            // Mã sku
+                            var colorCode = itemC.slice(0, 2).toUpperCase();
+                            var skuCode = $('#txtskucode').val() + '-' + changeStringToSlug(colorCode) + '-' + itemS.toUpperCase();
+
+                            row = `<div class="detail-product-table-row">
+                                        <div class="pro-detail-row-column pro-detail-header-productname">
+                                            <input class="pro-detail-row-column-input" type="text" value="${nameProduct}" />
+                                        </div>
+                                        <div class="pro-detail-row-column pro-detail-header-sku">
+                                            <input class="pro-detail-row-column-input" type="text" value="${skuCode}" />
+                                        </div>
+                                        <div class="pro-detail-row-column pro-detail-header-barcode">
+                                            <input class="pro-detail-row-column-input" type="text" />
+                                        </div>
+                                        <div class="pro-detail-row-column pro-detail-header-importprice">
+                                            <input class="pro-detail-row-column-input pro-detail-input-number" type="text" value="${purchasePrice}" />
+                                        </div>
+                                        <div class="pro-detail-row-column pro-detail-header-price" title="Áp dụng chính sách giá">
+                                            <input class="pro-detail-row-column-input pro-detail-input-number" type="text" value="${salePrice}" />
+                                            <span class="row-column-input-price-option"></span>
+                                        </div>
+                                        <div class="pro-detail-row-column table-detail-task-copy" title="Sao chép giá mua, giá bán và bảng giá xuống các dòng dưới"></div>
+                                        <div class="pro-detail-row-column table-detail-task-delete">
+                                            <div class="table-detail-task-delete-icon"></div>
+                                        </div>
+                                    </div>`;
+                        }
+                        
+                    });
+                    
+                });
+            }
+
+            table.append(row);
+        }
+        else {
+            $('#txtColorInput').val('');
         }
     }
 
     // Hàm xóa note Color
     removeColorTag(element, colorValue) {
-        // Xóa màu trong danh sách
+        // Xóa màu trong danh sách (mảng)
         var colorIndex = colorTagList.indexOf(colorValue);
         if (colorIndex > -1) { // only splice array when item is found
             colorTagList.splice(colorIndex, 1); // 2nd parameter means remove one item only
         }
-        // render lại note
+
+        // Xóa note và render lại note
         $('#inputcolorlist').empty();
         $.each(colorTagList, function (index, item) {
             var colorNode =
@@ -191,6 +285,8 @@ class ProductDetail {
             $('#inputcolorlist').append(colorNode);
             $('#txtColorInput').val('');
         });
+
+        // Xóa dòng có chứa màu bị xóa
     }
 
     // Hàm tạo note Size
@@ -211,6 +307,101 @@ class ProductDetail {
 
             $('#inputsizelist').append(sizeNote);
             $('#txtSizeInput').val('');
+
+            // Giá mua
+            var purchasePrice = $('#txtproductimportprice').val();
+            // Giá bán
+            var salePrice = $('#txtproductsellprice').val();
+
+            // Tạo dòng thông tin chi tiết thuộc tính
+            var table = $('.detail-product-table-body');
+            var row = '';
+            if (colorTagList.length == 0) {
+                // Tên hàng hóa
+                if ($('#txtproductname').val() != '') {
+                    var nameProduct = `${$('#txtproductname').val()}(${sizeValue})`;
+                } else {
+                    var nameProduct = sizeValue;
+                }
+                // Mã sku
+                var sizeCode = sizeValue.slice(0, 2).toUpperCase();
+                var skuCode = $('#txtskucode').val() + '-' + changeStringToSlug(sizeCode);
+
+                row = `<div class="detail-product-table-row">
+                        <div class="pro-detail-row-column pro-detail-header-productname">
+                            <input class="pro-detail-row-column-input" type="text" value="${nameProduct}" />
+                        </div>
+                        <div class="pro-detail-row-column pro-detail-header-sku">
+                            <input class="pro-detail-row-column-input" type="text" value="${skuCode}" />
+                        </div>
+                        <div class="pro-detail-row-column pro-detail-header-barcode">
+                            <input class="pro-detail-row-column-input" type="text" />
+                        </div>
+                        <div class="pro-detail-row-column pro-detail-header-importprice">
+                            <input class="pro-detail-row-column-input pro-detail-input-number" type="text" value="${purchasePrice}" />
+                        </div>
+                        <div class="pro-detail-row-column pro-detail-header-price" title="Áp dụng chính sách giá">
+                            <input class="pro-detail-row-column-input pro-detail-input-number" type="text" value="${salePrice}" />
+                            <span class="row-column-input-price-option"></span>
+                        </div>
+                        <div class="pro-detail-row-column table-detail-task-copy" title="Sao chép giá mua, giá bán và bảng giá xuống các dòng dưới"></div>
+                        <div class="pro-detail-row-column table-detail-task-delete">
+                            <div class="table-detail-task-delete-icon"></div>
+                        </div>
+                    </div>`;
+            }
+            else
+            {
+                $.each(colorTagList, function (indexC, itemC) {
+                    $.each(sizeTagList, function (indexS, itemS) {
+                        var colorSize = `${itemC}${itemS}`;
+                        if (colorSizeProduct.includes(colorSize) == false) {
+                            colorSizeProduct.push(colorSize);
+                            // Tên hàng hóa
+                            if ($('#txtproductname').val() != '') {
+                                var nameProduct = `${$('#txtproductname').val()}(${itemC}/${itemS})`;
+                            } else {
+                                var nameProduct = `(${itemC}/${itemS})`;
+                            }
+                            // Mã sku
+                            var colorCode = itemC.slice(0, 2).toUpperCase();
+                            var skuCode = $('#txtskucode').val() + '-' + changeStringToSlug(colorCode) + '-' + itemS.toUpperCase();
+
+                            row = `<div class="detail-product-table-row">
+                                        <div class="pro-detail-row-column pro-detail-header-productname">
+                                            <input class="pro-detail-row-column-input" type="text" value="${nameProduct}" />
+                                        </div>
+                                        <div class="pro-detail-row-column pro-detail-header-sku">
+                                            <input class="pro-detail-row-column-input" type="text" value="${skuCode}" />
+                                        </div>
+                                        <div class="pro-detail-row-column pro-detail-header-barcode">
+                                            <input class="pro-detail-row-column-input" type="text" />
+                                        </div>
+                                        <div class="pro-detail-row-column pro-detail-header-importprice">
+                                            <input class="pro-detail-row-column-input pro-detail-input-number" type="text" value="${purchasePrice}" />
+                                        </div>
+                                        <div class="pro-detail-row-column pro-detail-header-price" title="Áp dụng chính sách giá">
+                                            <input class="pro-detail-row-column-input pro-detail-input-number" type="text" value="${salePrice}" />
+                                            <span class="row-column-input-price-option"></span>
+                                        </div>
+                                        <div class="pro-detail-row-column table-detail-task-copy" title="Sao chép giá mua, giá bán và bảng giá xuống các dòng dưới"></div>
+                                        <div class="pro-detail-row-column table-detail-task-delete">
+                                            <div class="table-detail-task-delete-icon"></div>
+                                        </div>
+                                    </div>`;
+
+                        }
+
+                    });
+                    
+                });
+                
+            }
+
+            table.append(row);
+        }
+        else {
+            $('#txtSizeInput').val('');
         }
     }
 
@@ -221,6 +412,7 @@ class ProductDetail {
         if (sizeIndex > -1) {
             sizeTagList.splice(sizeIndex, 1);
         }
+
         // render lại size
         $('#inputsizelist').empty();
         $.each(sizeTagList, function (index, item) {
@@ -234,8 +426,13 @@ class ProductDetail {
             $('#inputsizelist').append(sizeNote);
             $('#txtSizeInput').val('');
         });
+
+        // Xóa dòng có chứa size bị xóa
     }
 
+    // Hàm tạo thông tin chi tiết thuộc tính
+    // date: 11/08/2023
+    
     // Hàm sinh mã SKU tự động sau khi thêm Tên hàng hóa
     autoCreateProductCode() {
         // Lấy thông tin giá trị nhập vào
@@ -363,6 +560,9 @@ class ProductDetail {
             data: productObj,
             success: function (response) {
                 alert('thành công');
+                $('.content-product').css('display', 'block');
+                $('.content-product-detail').css('display', 'none');
+                productJS.loadData();
             },
             false: function () {
                 alert('Thất bại');
