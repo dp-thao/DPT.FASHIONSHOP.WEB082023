@@ -668,16 +668,16 @@
                             </div>
                         </div>
                         <div class="row-input-image-display">
-                            <img id="imgproduct" style="width:100%;height:100%;display:none;" />
+                            <img id="imgproduct" style="width: 100%; height: 100%; object-fit: contain; display: none;" />
                         </div>
                         <div class="row-input-image-select-option">
-                            <a class="row-input-image-upload" title="Ảnh">
+                            <a class="row-input-image-upload" id="btnInputImage" title="Ảnh">
                                 <span>...</span>
                             </a>
                             <a class="row-input-image-upload row-input-image-cancel" id="btndisposeimage">
                                 <span></span>
                             </a>
-                            <input type="file" id="fileLoader" name="files" accept="image/*" title="Load File" style="display:none;" />
+                            <input type="file" id="fileLoader" onchange="productDetail.fileSelect(event)" name="files" accept="image/*" title="Load File" style="display:none;" />
                         </div>
                     </div>
                     <div class="row-input-image-explane">

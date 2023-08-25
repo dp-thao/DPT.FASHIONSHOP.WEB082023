@@ -1363,6 +1363,7 @@
     border-radius: 3px;
     margin-right: 8px;
     cursor: pointer;
+    text-decoration: none;
 }
 
     .row-input-image-upload span {
