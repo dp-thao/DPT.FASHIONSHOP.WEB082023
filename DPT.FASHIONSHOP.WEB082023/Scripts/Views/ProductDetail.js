@@ -20,6 +20,8 @@ var selectedCalculationUnit = null;
 // Biến nhận biết nhóm hàng hóa nào đang được lựa chọn
 var selectedGroupProduct = null;
 
+var newArrProduct = [];
+
 class ProductDetail {
     constructor() {
         this.initEvents();
@@ -230,7 +232,7 @@ class ProductDetail {
                 productDetail.removeRowWithoutSizeOrColor();
                 $.each(sizeTagList, function (indexS, itemS) {
                     $.each(colorTagList, function (indexC, itemC) {
-                        var colorSize = `${itemC}${itemS}`;
+                        var colorSize = `${itemC}-${itemS}`;
                         if (colorSizeProduct.includes(colorSize) == false) {
                             colorSizeProduct.push(colorSize);
 
@@ -244,7 +246,7 @@ class ProductDetail {
                             var colorCode = itemC.slice(0, 2).toUpperCase();
                             var skuCode = $('#txtskucode').val() + '-' + changeStringToSlug(colorCode) + '-' + itemS.toUpperCase();
 
-                            row = `<div class="detail-product-table-row" colorValue="${itemC}" sizeValue="${itemS}" >
+                            row += `<div class="detail-product-table-row" colorValue="${itemC}" sizeValue="${itemS}" >
                                         <div class="pro-detail-row-column pro-detail-header-productname">
                                             <input class="pro-detail-row-column-input" type="text" value="${nameProduct}" />
                                         </div>
@@ -267,9 +269,9 @@ class ProductDetail {
                                         </div>
                                     </div>`;
                         }
-                        
+
                     });
-                    
+
                 });
             }
 
@@ -302,7 +304,28 @@ class ProductDetail {
             $('#txtColorInput').val('');
         });
 
-        // Xóa dòng có chứa màu bị xóa
+        // Xóa các dòng có chứa note size bị xóa ở Chi tiết thuộc tính
+        //if (colorTagList.length == 0 && sizeTagList.length > 0) {
+        //    $('.detail-product-table-row[colorValue="' + colorValue + '"]').attr('colorValue', '');
+        //    $.each(sizeTagList, function (index, item) {
+        //        $('.pro-detail-header-productname input[value]').attr('value', '(' + item + '/)')
+        //    });
+        //} else {
+        //    $('.detail-product-table-row[colorValue="' + colorValue + '"]').remove();
+        //}
+
+        // Xóa phần tử có chưa note size bị xóa ở mảng colorSizeProduct
+        //var itemDel = [];
+        //$.each(colorSizeProduct, function (index, item) {
+        //    var itemColor = item.slice(item.substring(0, item.length - 1));
+        //    if (itemColor == colorValue) {
+        //        itemDel.push(item)
+        //    }
+        //});
+        //$.each(itemDel, function (index, item) {
+        //    var indexCS = colorSizeProduct.indexOf(item);
+        //    colorSizeProduct.splice(indexCS, 1);
+        //});
     }
 
     // Hàm tạo note Size
@@ -312,7 +335,7 @@ class ProductDetail {
         if (sizeTagList.includes(sizeValue) == false) {
             // Thêm giá trị size vào mảng
             sizeTagList.push(sizeValue);
-            // Tạo thẻ tag size
+            // Tạo thẻ note tag size
             var sizeNote =
                 `<li class="input-property-tag-item" onclick=productDetail.removeSizeTag(this,'${sizeValue}')>
                     <div class="input-property-tag-item-content">
@@ -366,14 +389,14 @@ class ProductDetail {
                         </div>
                     </div>`;
             }
-            else
-            {
+            else {
                 productDetail.removeRowWithoutSizeOrColor();
                 $.each(sizeTagList, function (indexS, itemS) {
                     $.each(colorTagList, function (indexC, itemC) {
-                        var colorSize = `${itemC}${itemS}`;
+                        var colorSize = `${itemC}-${itemS}`;
                         if (colorSizeProduct.includes(colorSize) == false) {
                             colorSizeProduct.push(colorSize);
+
                             // Tên hàng hóa
                             if ($('#txtproductname').val() != '') {
                                 var nameProduct = `${$('#txtproductname').val()}(${itemC}/${itemS})`;
@@ -384,7 +407,7 @@ class ProductDetail {
                             var colorCode = itemC.slice(0, 2).toUpperCase();
                             var skuCode = $('#txtskucode').val() + '-' + changeStringToSlug(colorCode) + '-' + itemS.toUpperCase();
 
-                            row = `<div class="detail-product-table-row" colorValue="${itemC}" sizeValue="${itemS}">
+                            row += `<div class="detail-product-table-row" colorValue="${itemC}" sizeValue="${itemS}">
                                         <div class="pro-detail-row-column pro-detail-header-productname">
                                             <input class="pro-detail-row-column-input" type="text" value="${nameProduct}" />
                                         </div>
@@ -410,9 +433,9 @@ class ProductDetail {
                         }
 
                     });
-                    
+
                 });
-                
+
             }
 
             table.append(row);
@@ -423,7 +446,7 @@ class ProductDetail {
     }
 
     // Hàm xóa note Size
-    removeSizeTag(element, sizeValue) {
+    removeSizeTag(sizeValue) {
         // Xóa size trong mảng
         var sizeIndex = sizeTagList.indexOf(sizeValue);
         if (sizeIndex > -1) {
@@ -444,7 +467,29 @@ class ProductDetail {
             $('#txtSizeInput').val('');
         });
 
-        // Xóa dòng có chứa size bị xóa
+        // Xóa các dòng có chứa note size bị xóa ở Chi tiết thuộc tính
+        if (colorTagList.length > 0 && sizeTagList.length == 0) {
+            $('.detail-product-table-row[sizeValue="' + sizeValue + '"]').attr('sizeValue', '');
+            $.each(colorTagList, function (index, item) {
+                $('.pro-detail-header-productname input[value]').attr('value', '(' + item +'/)')
+            });
+        } else {
+            $('.detail-product-table-row[sizeValue="' + sizeValue + '"]').remove();
+        }
+
+        // Xóa phần tử có chưa note size bị xóa ở mảng colorSizeProduct
+        var itemDel = [];
+        $.each(colorSizeProduct, function (index, item) {
+            if (item.includes(`-${sizeValue}`) == true) {
+                itemDel.push(item);
+            };
+        });
+        $.each(itemDel, function (index, item) {
+            if (colorSizeProduct.includes(item) == true) {
+                colorSizeProduct.slice(colorSizeProduct.indexOf(item), 1);
+            }
+        });
+        
     }
 
     // Hàm xóa row chỉ có màu hoặc chỉ có size
@@ -457,7 +502,7 @@ class ProductDetail {
     removeRow(element) {
         element.parentNode.remove();
     }
-    
+
     // Hàm sinh mã SKU tự động sau khi thêm Tên hàng hóa
     autoCreateProductCode() {
         // Lấy thông tin giá trị nhập vào
@@ -621,7 +666,7 @@ class ProductDetail {
         } else {
             alert('Nhập đầy đủ thông tin sản phẩm!');
         }
-        
+
     }
 }
 
