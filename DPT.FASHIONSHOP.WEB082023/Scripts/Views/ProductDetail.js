@@ -27,6 +27,31 @@ class ProductDetail {
 
     // ======================== Xử lý sự kiện ========================
     initEvents() {
+        // Sự kiện kiểm tra input tên hàng hóa đã nhập dữ liệu chưa
+        $('#txtproductname').on('focusout', function () {
+            if ($('#txtproductname').val() == '') {
+                $('#txtproductname').parents(".row-input-div-productname").css('border', 'none');
+                $('#txtproductname').css('width', '239px');
+                $('#txtproductname').css('border', '1px solid red');
+                $('#errorproductname').css('display', 'block');
+            } else {
+                $('#txtproductname').parents(".row-input-div-productname").css('border', 'block');
+                $('#txtproductname').parents(".row-input-div-productname").css('border-color', '#77b0e2');
+            }
+        });
+        $('#txtproductname').on('keyup', function () {
+            if ($('#txtproductname').val() === "") {
+                $('#row-input-div-productname').css('border', 'none');
+                $('#txtproductname').css('border', '1px solid red');
+                $('#errorproductname').css('display', 'block');
+            }
+            else {
+                $('#row-input-div-productname').css('border', '1px solid #77b0e2');
+                $('#txtproductname').css('border', 'none');
+                $('#errorproductname').css('display', 'none');
+            }
+        });
+
         // Sự kiện nhất nút Hủy bỏ
         $('#btnProductTopCancel').on('click', function () {
             // Ẩn
@@ -123,7 +148,12 @@ class ProductDetail {
 
         // Sự kiện nhập vào là tiền
         $('#txtproductimportprice').on('keyup', function () {
-
+            var money = $('#txtproductimportprice').val().replace('.', '');            
+            $('#txtproductimportprice').val(new Intl.NumberFormat('en-DE', { style: "decimal",}).format(money));          
+        });
+        $('#txtproductsellprice').on('keyup', function () {
+            var money = $('#txtproductsellprice').val().replace('.', '');
+            $('#txtproductsellprice').val(new Intl.NumberFormat('en-DE', { style: "decimal", }).format(money));
         });
 
         //$('.row-detail-input-number').on('keyup', function () {
@@ -835,5 +865,7 @@ function onlyNumberInput(evt) {
 // Hàm tự động chuyển giá trị ô nhập về định dạng tiền tệ
 // date: 10/08/2023
 function autoCurrencyInput(money) {
-
+    
 }
+
+

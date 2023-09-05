@@ -36,20 +36,30 @@ class ProductJS {
             if ($('.grid-header-checkcolumn-icon').hasClass('grid-body-row-checkbox-icon-checked')) {
                 $('.grid-header-checkcolumn-icon').removeClass('grid-body-row-checkbox-icon-checked');
                 $('.grid-body-checkbox-icon').removeClass('grid-body-row-checkbox-icon-checked');
+                $('#btnDuplicateProduct').removeClass('toolbar-button-disable-event');
+                $('#btnEditProduct').removeClass('toolbar-button-disable-event');
             } else {
                 $('.grid-header-checkcolumn-icon').addClass('grid-body-row-checkbox-icon-checked');
                 $('.grid-body-checkbox-icon').addClass('grid-body-row-checkbox-icon-checked');
+                $('#btnDuplicateProduct').addClass('toolbar-button-disable-event');
+                $('#btnEditProduct').addClass('toolbar-button-disable-event');
             }
         });
 
         // Sự kiện nhấn từng nút check
-        $('.grid-body-checkbox-icon').click(function () {
-            if ($(this).hasClass('grid-body-row-checkbox-icon-checked')) {
-                $(this).removeClass('grid-body-row-checkbox-icon-checked');
-            } else {
-                $(this).addClass('grid-body-row-checkbox-icon-checked');
-            }
+        //$('.grid-body-checkbox-icon').click(function () {
+        //    if ($(this).hasClass('grid-body-row-checkbox-icon-checked')) {
+        //        $(this).removeClass('grid-body-row-checkbox-icon-checked');
+        //    } else {
+        //        $(this).addClass('grid-body-row-checkbox-icon-checked');
+        //    }
+        //});
+        $(".grid-body-checkbox-icon").on("dblclick", function () {
+            alert("Handler for `dblclick` called.");
         });
+        //$('.grid-body-checkbox-icon').on('dblclick', function () {
+        //    alert(123);
+        //});
 
         // Ẩn - hiện các điều kiện lọc thường
         $('.nomal-condition-search').on('click', function () {
@@ -164,6 +174,68 @@ class ProductJS {
 
     }
 
+    //$('.grid-header-checkcolumn-icon').on('click', function() {
+    //    if ($('.grid-header-checkcolumn-icon').hasClass('grid-body-row-checkbox-icon-checked')) {
+    //        $('.grid-header-checkcolumn-icon').removeClass('grid-body-row-checkbox-icon-checked');
+    //        $('.grid-body-checkbox-icon').removeClass('grid-body-row-checkbox-icon-checked');
+    //    } else {
+    //        $('.grid-header-checkcolumn-icon').addClass('grid-body-row-checkbox-icon-checked');
+    //        $('.grid-body-checkbox-icon').addClass('grid-body-row-checkbox-icon-checked');
+    //    }
+    //});
+
+    // ======================== Hàm xử lý nghiệp vụ ========================
+    // Hàm xử lý click checkbox
+    chooseRowCheckbox(element) {
+        if ($(element).children().hasClass('grid-body-row-checkbox-icon-checked')) {
+            $(element).children().removeClass('grid-body-row-checkbox-icon-checked');
+        } else { 
+            $(element).children().addClass('grid-body-row-checkbox-icon-checked');
+        }
+
+        // Kiểm tra các ô check box đã click hết chưa, nếu đã click hết thì click checkbox tất cả, nếu chưa thì không click checkbox all
+        var dem = 0;
+        var classList = $('.grid-body-checkbox-icon'); // danh sách các ô checkbox
+        $.each(classList, function (index, item) { // lăp kiểm tra từng ô checkbox xem đã click chưa
+            // nếu chưa click thì biến đếm giữ nguyên, nếu click thì biến đếm tăng 1
+            if ($(item).hasClass('grid-body-row-checkbox-icon-checked') == true) {
+                dem++;
+            }
+        });
+        // nếu tất cả các checkbox đều click thì click checkbox tất cả
+        if (dem == classList.length) {
+            $('.grid-header-checkcolumn-icon').addClass('grid-body-row-checkbox-icon-checked');
+        } else {
+            $('.grid-header-checkcolumn-icon').removeClass('grid-body-row-checkbox-icon-checked');
+        }
+        // nếu có nhiều hơn 2 ô checkbox được click thì ẩn Nhân bản và Sửa
+        if (dem >= 2) {
+            $('#btnDuplicateProduct').addClass('toolbar-button-disable-event');
+            $('#btnEditProduct').addClass('toolbar-button-disable-event');
+        } else {
+            $('#btnDuplicateProduct').removeClass('toolbar-button-disable-event');
+            $('#btnEditProduct').removeClass('toolbar-button-disable-event');
+        }
+    }
+
+    // Hàm xử lý sự kiện click dòng product
+    setCurrentID(element) {
+        $(element).css('background', '#c3ecff');
+    }
+
+    // Hàm xử lý double click dòng product
+    dbclickToEdit() {
+        // Ẩn
+        $('.content-product').css('display', 'none');
+        $('.panel-back').css('display', 'none');
+        // Hiện
+        $('.panel-title-text-task').css('display', 'flex');
+        $('.content-product-detail').css('display', 'block');
+        $('.panel-title-text-catalog').css('color', 'rgb(84, 144, 174)');
+        $('.panel-title-text-task').html('/&ensp;Sửa');
+        $('.content-status-option').css('display', 'flex');
+    }
+
     // ======================== Thao tác với dữ liệu ========================
 
     // Đổ dữ liệu lên grid view
@@ -183,9 +255,13 @@ class ProductJS {
                     var data = response.Data;
                     // Lặp từng dòng dữ liệu
                     $.each(data, function (index, item) { // data: một mảng các đối tượng - item: từng tối tượng
-                        divHTML = '<div class="row grid-body-row grid-body-row-odd", ' + index + '></div>';
+                        if (index % 2 == 0) {
+                            divHTML = '<div class="row grid-body-row grid-body-row-odd" onclick="productJS.setCurrentID(this)" ondblclick="productJS.dbclickToEdit()",' + index + '></div>';
+                        } else {
+                            divHTML = '<div class="row grid-body-row grid-body-row-even" onclick="productJS.setCurrentID(this)" ondblclick="productJS.dbclickToEdit()",' + index + '></div>';
+                        }
                         divHTML = $(divHTML).append(
-                            '<div class="col-lg-1 grid-body-colum-checkbox">' +
+                            '<div class="col-lg-1 grid-body-colum-checkbox" onclick=productJS.chooseRowCheckbox(this,"' + item["ProductID"]+'")>' +
                             '<span class="grid-body-checkbox-icon"></span>' +
                             '</div>' +
                             '<div class="col-lg-1 grid-body-colum grid-body-colum-sku">' + item["SKUCode"] + '</div>' +
@@ -213,6 +289,8 @@ class ProductJS {
             }
         });
     }
+
+    
 }
 
 var productJS = new ProductJS();
