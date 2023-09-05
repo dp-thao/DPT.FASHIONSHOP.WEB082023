@@ -1,8 +1,6 @@
 ﻿
 $(document).ready(function () {
-    //productDetail.getGroupProduct();
-    //productDetail.getCalculationUnit();
-    //$('#txtproductcategory').val($('.input-category-option-block li:first-child').text());
+    $('#txtproductname').focus();
 })
 
 // Chỉ số phía sau của mã hàng hóa tự sinh
@@ -19,8 +17,8 @@ var colorSizeProduct = [];
 var selectedCalculationUnit = null;
 // Biến nhận biết nhóm hàng hóa nào đang được lựa chọn
 var selectedGroupProduct = null;
+// Biến nhận biết chỉ số dòng của thông tin chi tiết thuộc tính
 var indexRow = 0;
-//var newArrProduct = [];
 
 class ProductDetail {
     constructor() {
@@ -310,10 +308,55 @@ class ProductDetail {
 
         // Xóa các dòng có chứa note size bị xóa ở Chi tiết thuộc tính
         if (colorTagList.length == 0 && sizeTagList.length > 0) {
-            $('.detail-product-table-row[colorValue="' + colorValue + '"]').attr('colorValue', '');
+            // xóa đi dòng chi tiết thuộc tính có tag color vừa xóa
+            $('.detail-product-table-row[colorValue="' + colorValue + '"]').remove();
+
+            // Giá mua
+            var purchasePrice = $('#txtproductimportprice').val();
+            // Giá bán
+            var salePrice = $('#txtproductsellprice').val();
+
+            // Tạo dòng thông tin chi tiết thuộc tính
+            var table = $('.detail-product-table-body');
+            var row = '';
+
+            // vẽ lại dòng chỉ có size sau khi tag color vừa xóa hết
             $.each(sizeTagList, function (index, item) {
-                $('.pro-detail-header-productname input[value]').attr('value', '(' + item + '/)')
-            });
+                // Tên hàng hóa
+                if ($('#txtproductname').val() != '') {
+                    var nameProduct = `${$('#txtproductname').val()}(${item})`;
+                } else {
+                    var nameProduct = item;
+                }
+                // Mã sku
+                var sizeCode = item.slice(0, 2).toUpperCase();
+                var skuCode = $('#txtskucode').val() + '-' + changeStringToSlug(sizeCode);
+                row = `<div class="detail-product-table-row" indexRow=${indexRow} colorValue="" sizeValue="${item}">
+                        <div class="pro-detail-row-column pro-detail-header-productname">
+                            <input class="pro-detail-row-column-input" type="text" value="${nameProduct}" />
+                        </div>
+                        <div class="pro-detail-row-column pro-detail-header-sku">
+                            <input class="pro-detail-row-column-input" type="text" value="${skuCode}" />
+                        </div>
+                        <div class="pro-detail-row-column pro-detail-header-barcode">
+                            <input class="pro-detail-row-column-input" type="text" />
+                        </div>
+                        <div class="pro-detail-row-column pro-detail-header-importprice">
+                            <input class="pro-detail-row-column-input pro-detail-input-number" type="text" value="${purchasePrice}" />
+                        </div>
+                        <div class="pro-detail-row-column pro-detail-header-price" title="Áp dụng chính sách giá">
+                            <input class="pro-detail-row-column-input pro-detail-input-number" type="text" value="${salePrice}" />
+                            <span class="row-column-input-price-option"></span>
+                        </div>
+                        <div class="pro-detail-row-column table-detail-task-copy" title="Sao chép giá mua, giá bán và bảng giá xuống các dòng dưới"></div>
+                        <div class="pro-detail-row-column table-detail-task-delete" onclick=productDetail.removeRow(this)>
+                            <div class="table-detail-task-delete-icon"></div>
+                        </div>
+                    </div>`;
+                indexRow += 1;
+                table.append(row);
+            });                
+                
         } else {
             $('.detail-product-table-row[colorValue="' + colorValue + '"]').remove();
         }
@@ -464,23 +507,68 @@ class ProductDetail {
 
         // render lại size
         $('#inputsizelist').empty();
-        $.each(sizeTagList, function (index, item) {
-            var sizeNote =
-                `<li class="input-property-tag-item" onclick=productDetail.removeSizeTag(this,'${item}')>
+        if (sizeTagList.length > 0) {
+            $.each(sizeTagList, function (index, item) {
+                var sizeNote =
+                    `<li class="input-property-tag-item" onclick=productDetail.removeSizeTag(this,'${item}')>
                     <div class="input-property-tag-item-content">
                         <span>${item}</span>
                         <span class="input-property-tag-item-dispose"></span>
                     </div>
                 </li>`;
-            $('#inputsizelist').append(sizeNote);
-            $('#txtSizeInput').val('');
-        });
+                $('#inputsizelist').append(sizeNote);
+                $('#txtSizeInput').val('');
+            });
+        }        
 
         // Xóa các dòng có chứa note size bị xóa ở Chi tiết thuộc tính
         if (colorTagList.length > 0 && sizeTagList.length == 0) {
-            $('.detail-product-table-row[sizeValue="' + sizeValue + '"]').attr('sizeValue', '');
+            $('.detail-product-table-row[sizeValue="' + sizeValue + '"]').remove();
+            
+            // Giá mua
+            var purchasePrice = $('#txtproductimportprice').val();
+            // Giá bán
+            var salePrice = $('#txtproductsellprice').val();
+
+            // Tạo dòng thông tin chi tiết thuộc tính
+            var table = $('.detail-product-table-body');
+            var row = '';
+
+            // Vẽ lại dòng chỉ có color sau khi size vừa xóa hết
             $.each(colorTagList, function (index, item) {
-                $('.pro-detail-header-productname input[value]').attr('value', '(' + item + '/)')
+                // Tên hàng hóa
+                if ($('#txtproductname').val() != '') {
+                    var nameProduct = `${$('#txtproductname').val()}(${item})`;
+                } else {
+                    var nameProduct = item;
+                }
+                // Mã sku
+                var colorCode = item.slice(0, 2).toUpperCase();
+                var skuCode = $('#txtskucode').val() + '-' + changeStringToSlug(colorCode);
+                row = `<div class="detail-product-table-row" indexRow=${indexRow} colorValue="${item}" sizeValue="" >
+                        <div class="pro-detail-row-column pro-detail-header-productname">
+                            <input class="pro-detail-row-column-input" type="text" value="${nameProduct}" />
+                        </div>
+                        <div class="pro-detail-row-column pro-detail-header-sku">
+                            <input class="pro-detail-row-column-input" type="text" value="${skuCode}" />
+                        </div>
+                        <div class="pro-detail-row-column pro-detail-header-barcode">
+                            <input class="pro-detail-row-column-input" type="text" />
+                        </div>
+                        <div class="pro-detail-row-column pro-detail-header-importprice">
+                            <input class="pro-detail-row-column-input pro-detail-input-number" type="text" value="${purchasePrice}" />
+                        </div>
+                        <div class="pro-detail-row-column pro-detail-header-price" title="Áp dụng chính sách giá">
+                            <input class="pro-detail-row-column-input pro-detail-input-number" type="text" value="${salePrice}" />
+                            <span class="row-column-input-price-option"></span>
+                        </div>
+                        <div class="pro-detail-row-column table-detail-task-copy" title="Sao chép giá mua, giá bán và bảng giá xuống các dòng dưới"></div>
+                        <div class="pro-detail-row-column table-detail-task-delete" onclick=productDetail.removeRow(this)>
+                            <div class="table-detail-task-delete-icon"></div>
+                        </div>
+                    </div>`;
+                indexRow += 1;
+                table.append(row);
             });
         } else {
             $('.detail-product-table-row[sizeValue="' + sizeValue + '"]').remove();

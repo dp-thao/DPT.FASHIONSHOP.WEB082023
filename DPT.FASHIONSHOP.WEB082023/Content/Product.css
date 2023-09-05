@@ -1181,7 +1181,8 @@
 .detail-product-div {
     height: 230px;
     width: 100%;
-    display: flex;
+    /*display: flex;*/
+    display: none;
     margin-left: 8px;
 }
 
@@ -1344,6 +1345,13 @@
 .row-input-image-display {
     height: 118px;
     width: 100%;
+}
+
+#imgproduct {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: none;
 }
 
 .row-input-image-select-option {
