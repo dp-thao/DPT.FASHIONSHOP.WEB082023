@@ -54,6 +54,7 @@ class ProductDetail {
 
         // Sự kiện nhất nút Hủy bỏ
         $('#btnProductTopCancel').on('click', function () {
+            statusSave = null;
             // Ẩn
             $('.content-product').css('display', 'block');
             $('.content-product-detail').css('display', 'none');
@@ -65,6 +66,7 @@ class ProductDetail {
             $('.panel-back').css('display', 'flex');
         });
         $('#btnProductBottomCancel').on('click', function () {
+            statusSave = null;
             // Ẩn
             $('.content-product').css('display', 'block');
             $('.content-product-detail').css('display', 'none');
@@ -175,7 +177,15 @@ class ProductDetail {
 
         // Sự kiện lưu khi thêm hàng hóa
         $('#btnProductTopSave').on('click', function () {
-            productDetail.addNewProduct();
+            if (statusSave == 'add') {
+                productDetail.addNewProduct();
+            }
+            if (statusSave == 'edit') {
+                productDetail.editProduct();
+            }
+            if (statusSave == 'delete') {
+                productDetail.deleteProduct();
+            }
         });
 
         // Sự kiện hiển thị file Ảnh hàng hóa
@@ -833,6 +843,16 @@ class ProductDetail {
             alert('Nhập đầy đủ thông tin sản phẩm!');
         }
 
+    }
+
+    // Hàm sửa product
+    editProduct() {
+        alert(123);
+    }
+
+    // Hàm xóa product
+    deleteProduct() {
+        alert(123);
     }
 }
 

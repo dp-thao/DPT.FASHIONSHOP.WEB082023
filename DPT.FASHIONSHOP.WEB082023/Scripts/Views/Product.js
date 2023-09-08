@@ -4,7 +4,8 @@ $(document).ready(function () {
     productJS.loadData();
 })
 
-
+var sumPage = 0; // Biến nhận biết tổng số trang
+var statusSave = null; // Biến nhận biết trạng thái tương tác Thêm, Sửa, Xóa, Nhân bản
 
 class ProductJS {
     constructor() {
@@ -139,6 +140,7 @@ class ProductJS {
 
         // Sự kiện nhất nút Thêm mới
         $('#btnAddProduct').on('click', function () {
+            statusSave = 'add';
             // Ẩn
             $('.content-product').css('display', 'none');
             $('.panel-back').css('display', 'none');
@@ -151,6 +153,7 @@ class ProductJS {
 
         // Sự kiện nhất nút Nhân bản
         $('#btnDuplicateProduct').on('click', function () {
+            statusSave = 'duplicate';
             // Ẩn
             $('.content-product').css('display', 'none');
             $('.panel-back').css('display', 'none');
@@ -163,6 +166,7 @@ class ProductJS {
 
         // Sự kiện nhất nút Sửa
         $('#btnEditProduct').on('click', function () {
+            statusSave = 'edit';
             // Ẩn
             $('.content-product').css('display', 'none');
             $('.panel-back').css('display', 'none');
@@ -172,6 +176,10 @@ class ProductJS {
             $('.panel-title-text-catalog').css('color', 'rgb(84, 144, 174)');
             $('.panel-title-text-task').html('/&ensp;Sửa');
             $('.content-status-option').css('display', 'flex');
+        });
+
+        $('#btnDeleteProduct').on('click', function () {
+            statusSave = 'delete';
         });
 
         // Sự kiện nhấn kích thước trang
@@ -186,16 +194,24 @@ class ProductJS {
         $('#btnnextpage').on('click', function () {
             var currentPage = $('#pagingnumberinput').val();
             var pageSize = $('.paging-record-select').val();
-            currentPage++;
-            productJS.productListPaging(currentPage, pageSize);
+            if (currentPage < sumPage) {
+                currentPage++;
+                productJS.productListPaging(currentPage, pageSize);
+            } else {
+                productJS.productListPaging(currentPage, pageSize);
+            }
         });
 
         // Sự kiện trang trước
         $('#btnpreviouspage').on('click', function () {
             var currentPage = $('#pagingnumberinput').val();
             var pageSize = $('.paging-record-select').val();
-            currentPage--;
-            productJS.productListPaging(currentPage, pageSize);
+            if (currentPage > 1) {
+                currentPage--;
+                productJS.productListPaging(currentPage, pageSize);
+            } else {
+                productJS.productListPaging(currentPage, pageSize);
+            }
         });
 
     }
@@ -243,7 +259,7 @@ class ProductJS {
     }
 
     // Hàm xử lý double click dòng product
-    dbclickToEdit() {
+    dbclickToEdit(element, productID) {
         // Ẩn
         $('.content-product').css('display', 'none');
         $('.panel-back').css('display', 'none');
@@ -271,7 +287,7 @@ class ProductJS {
                 if (response.Data.length > 0) {
                     var data = response.Data;
                     var sumRow = data.length;
-                    var sumPage = 0;
+                    /*var sumPage = 0;*/
                     // Tính tổng số trang
                     if (sumRow % 2 == 0) {
                         sumPage = sumRow / 10;
@@ -326,7 +342,7 @@ class ProductJS {
                 if (response.Data.length > 0) {
                     var data = response.Data;
                     var sumRow = data.length; // tổng số dòng (sản phẩm)                 
-                    var sumPage = 0; // Tổng số trang
+                    /*var sumPage = 0;*/ // Tổng số trang
                     // Tính tổng số trang
                     if (sumRow % pageSize == 0) {
                         sumPage = sumRow / pageSize;
@@ -344,8 +360,13 @@ class ProductJS {
                             }
                         } else {
                             var rowBegin = (currentPage - 1) * pageSize;
-                            for (var i = rowBegin; i < (rowBegin + Number(pageSize)); i++) {
-                                productJS.productRows(i, data);
+                            var rowEnd = rowBegin + Number(pageSize);
+                            for (var i = rowBegin; i < rowEnd; i++) {
+                                if (data[i] != null) {
+                                    productJS.productRows(i, data);
+                                } else {
+                                    break;
+                                }
                             }
                         }
                     }                  
@@ -363,16 +384,16 @@ class ProductJS {
         });
     }
 
-    // Hàm hiển thị dòng product
+    // Hàm hỗ trợ hiển thị dòng product theo phân trang
     productRows(index, product) {
         var divHTML = '';
         if (index % 2 == 0) {
-            divHTML = `<div class="row grid-body-row grid-body-row-odd" onclick="productJS.setCurrentID(this)" ondblclick="productJS.dbclickToEdit()" ${index}></div>`;
+            divHTML = `<div class="row grid-body-row grid-body-row-odd" onclick="productJS.setCurrentID(this)" ondblclick="productJS.dbclickToEdit(this, '${product[index].ProductID}')" indexRow="${index}"></div>`;
         } else {
-            divHTML = `<div class="row grid-body-row grid-body-row-even" onclick="productJS.setCurrentID(this)" ondblclick="productJS.dbclickToEdit()" ${index}></div>`;
+            divHTML = `<div class="row grid-body-row grid-body-row-even" onclick="productJS.setCurrentID(this)" ondblclick="productJS.dbclickToEdit(this, '${product[index].ProductID}')" indexRow="${index}"></div>`;
         }
         divHTML = $(divHTML).append(`
-            <div class="col-lg-1 grid-body-colum-checkbox" onclick="productJS.chooseRowCheckbox(this, ${product[index].ProductID})">
+            <div class="col-lg-1 grid-body-colum-checkbox" onclick="productJS.chooseRowCheckbox(this, '${product[index].ProductID}')">
                 <span class="grid-body-checkbox-icon"></span>
             </div>
             <div class="col-lg-1 grid-body-colum grid-body-colum-sku">${product[index].SKUCode}</div>
@@ -388,7 +409,7 @@ class ProductJS {
                                 `);
         $('.grid-body').append(divHTML);
     }
-    
+
 }
 
 var productJS = new ProductJS();
