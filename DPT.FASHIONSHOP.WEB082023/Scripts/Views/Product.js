@@ -4,6 +4,8 @@ $(document).ready(function () {
     productJS.loadData();
 })
 
+
+
 class ProductJS {
     constructor() {
         this.initEvents();
@@ -172,24 +174,38 @@ class ProductJS {
             $('.content-status-option').css('display', 'flex');
         });
 
-    }
+        // Sự kiện nhấn kích thước trang
+        $('.paging-record-select').on('change', function () {
+            console.log(this.value);
+            var pageSize = this.value; // kích thước trang
+            $('#pagingnumberinput').val('1');
+            productJS.productListPaging(1, pageSize);
+        });
 
-    //$('.grid-header-checkcolumn-icon').on('click', function() {
-    //    if ($('.grid-header-checkcolumn-icon').hasClass('grid-body-row-checkbox-icon-checked')) {
-    //        $('.grid-header-checkcolumn-icon').removeClass('grid-body-row-checkbox-icon-checked');
-    //        $('.grid-body-checkbox-icon').removeClass('grid-body-row-checkbox-icon-checked');
-    //    } else {
-    //        $('.grid-header-checkcolumn-icon').addClass('grid-body-row-checkbox-icon-checked');
-    //        $('.grid-body-checkbox-icon').addClass('grid-body-row-checkbox-icon-checked');
-    //    }
-    //});
+        // Sự kiện trang tiếp theo
+        $('#btnnextpage').on('click', function () {
+            var currentPage = $('#pagingnumberinput').val();
+            var pageSize = $('.paging-record-select').val();
+            currentPage++;
+            productJS.productListPaging(currentPage, pageSize);
+        });
+
+        // Sự kiện trang trước
+        $('#btnpreviouspage').on('click', function () {
+            var currentPage = $('#pagingnumberinput').val();
+            var pageSize = $('.paging-record-select').val();
+            currentPage--;
+            productJS.productListPaging(currentPage, pageSize);
+        });
+
+    }
 
     // ======================== Hàm xử lý nghiệp vụ ========================
     // Hàm xử lý click checkbox
     chooseRowCheckbox(element) {
         if ($(element).children().hasClass('grid-body-row-checkbox-icon-checked')) {
             $(element).children().removeClass('grid-body-row-checkbox-icon-checked');
-        } else { 
+        } else {
             $(element).children().addClass('grid-body-row-checkbox-icon-checked');
         }
 
@@ -220,6 +236,9 @@ class ProductJS {
 
     // Hàm xử lý sự kiện click dòng product
     setCurrentID(element) {
+        //Đổi màu dòng khi click
+        $('.grid-body-row-odd').css('background', '#fff');
+        $('.grid-body-row-even').css('background', 'rgb(246, 246, 246)');
         $(element).css('background', '#c3ecff');
     }
 
@@ -237,7 +256,6 @@ class ProductJS {
     }
 
     // ======================== Thao tác với dữ liệu ========================
-
     // Đổ dữ liệu lên grid view
     loadData() {
         $('.grid-body').empty();
@@ -251,32 +269,35 @@ class ProductJS {
             // Nếu thành công thì đổ dữ liệu ra grid
             success: function (response) { // response: máy chủ trả về dữ liệu JSON, truy cập trong hàm xử lý "success" thông qua tham số response
                 if (response.Data.length > 0) {
-                    var divHTML = '';
                     var data = response.Data;
+                    var sumRow = data.length;
+                    var sumPage = 0;
+                    // Tính tổng số trang
+                    if (sumRow % 2 == 0) {
+                        sumPage = sumRow / 10;
+                    } else {
+                        sumPage = Math.floor(sumRow / 10) + 1;
+                    }
+                    $('#lbl-sumPage').text(`trên ${sumPage}`);
+                    var currentPage = $('#pagingnumberinput').val();
                     // Lặp từng dòng dữ liệu
-                    $.each(data, function (index, item) { // data: một mảng các đối tượng - item: từng tối tượng
-                        if (index % 2 == 0) {
-                            divHTML = '<div class="row grid-body-row grid-body-row-odd" onclick="productJS.setCurrentID(this)" ondblclick="productJS.dbclickToEdit()",' + index + '></div>';
+                    if (currentPage <= sumPage && currentPage > 0) {
+                        $('#pagingnumberinput').val(currentPage);
+                        $('.paging-record-select').val('10');
+                        var pageSize = $('.paging-record-select').val();
+
+                        // lặp dòng và hiển thị số dòng theo phân trang
+                        if (currentPage == 1) {
+                            for (var index = 0; index < pageSize; index++) {
+                                productJS.productRows(index, data);
+                            }
                         } else {
-                            divHTML = '<div class="row grid-body-row grid-body-row-even" onclick="productJS.setCurrentID(this)" ondblclick="productJS.dbclickToEdit()",' + index + '></div>';
+                            var rowBegin = (currentPage - 1) * pageSize;
+                            for (var index = rowBegin; index < (rowBegin + Number(pageSize)); index++) {
+                                productJS.productRows(index, data);
+                            }
                         }
-                        divHTML = $(divHTML).append(
-                            '<div class="col-lg-1 grid-body-colum-checkbox" onclick=productJS.chooseRowCheckbox(this,"' + item["ProductID"]+'")>' +
-                            '<span class="grid-body-checkbox-icon"></span>' +
-                            '</div>' +
-                            '<div class="col-lg-1 grid-body-colum grid-body-colum-sku">' + item["SKUCode"] + '</div>' +
-                            '<div class="col-lg-4 grid-body-colum grid-body-colum-productname">' +
-                            '<a href="#">' + item["ProductName"] + '</a>' +
-                            '</div>' +
-                            '<div class="col-lg-1 grid-body-colum grid-body-colum-groupproduct">' + item["ProductGroupName"] + '</div>' +
-                            '<div class="col-lg-1 grid-body-colum grid-body-colum-counter">' + item["CalculationUnitName"] + '</div>' +
-                            '<div class="col-lg-1 grid-body-colum grid-body-colum-price">' + item["SalePrice"] + '</div>' +
-                            '<div class="col-lg-1 grid-body-colum grid-body-colum-displayscreen">Có</div>' +
-                            '<div class="col-lg-1 grid-body-colum grid-body-colum-category">Hàng hóa</div>' +
-                            '<div class="col-lg-1 grid-body-colum grid-body-colum-status">Đang kinh doanh</div>'
-                        );
-                        $('.grid-body').append(divHTML);
-                    });
+                    }
                 }
             },
             // Nếu không thành công thì hiện thông báo không thành công
@@ -290,6 +311,83 @@ class ProductJS {
         });
     }
 
+    // Hiển thị danh sách product theo phân trang
+    productListPaging(currentPage, pageSize) {
+        $('.grid-body').empty();
+        $.ajax({
+            method: 'POST', // phương thức gửi request
+            async: false,
+            data: [], // dữ liệu gửi đi chứa trong body
+            dataType: 'json', // kiểu dữ liệu mong muốn trả về
+            contentType: 'application/json', // kiểu dữ liệu gửi đi
+            url: '/Product/Get',
+            // Nếu thành công thì đổ dữ liệu ra grid
+            success: function (response) { // response: máy chủ trả về dữ liệu JSON, truy cập trong hàm xử lý "success" thông qua tham số response
+                if (response.Data.length > 0) {
+                    var data = response.Data;
+                    var sumRow = data.length; // tổng số dòng (sản phẩm)                 
+                    var sumPage = 0; // Tổng số trang
+                    // Tính tổng số trang
+                    if (sumRow % pageSize == 0) {
+                        sumPage = sumRow / pageSize;
+                    } else {
+                        sumPage = Math.floor(sumRow / pageSize) + 1;
+                    }                    
+                    $('#lbl-sumPage').text(`trên ${sumPage}`); // gán lại tổng số trang để hiển thị trên giao diện
+                    // kiểm tra trang hiện tại có lớn hơn tổng số trang không, nếu nhỏ hơn hoặc bằng thì thực hiện hiển thị danh sách sản phẩm, nếu lớn hơn thì không làm gì cả
+                    if (currentPage <= sumPage && currentPage > 0) {
+                        $('#pagingnumberinput').val(currentPage);
+                        // lặp dòng và hiển thị số dòng theo phân trang
+                        if (currentPage == 1) {
+                            for (var i = 0; i < pageSize; i++) {
+                                productJS.productRows(i, data);
+                            }
+                        } else {
+                            var rowBegin = (currentPage - 1) * pageSize;
+                            for (var i = rowBegin; i < (rowBegin + Number(pageSize)); i++) {
+                                productJS.productRows(i, data);
+                            }
+                        }
+                    }                  
+                    
+                }
+            },
+            // Nếu không thành công thì hiện thông báo không thành công
+            fail: function (response) {
+                alert("Không thành công!");
+            },
+            // Nếu lỗi thì hiện thông báo lỗi
+            error: function (response) {
+                alert("Có lỗi!");
+            }
+        });
+    }
+
+    // Hàm hiển thị dòng product
+    productRows(index, product) {
+        var divHTML = '';
+        if (index % 2 == 0) {
+            divHTML = `<div class="row grid-body-row grid-body-row-odd" onclick="productJS.setCurrentID(this)" ondblclick="productJS.dbclickToEdit()" ${index}></div>`;
+        } else {
+            divHTML = `<div class="row grid-body-row grid-body-row-even" onclick="productJS.setCurrentID(this)" ondblclick="productJS.dbclickToEdit()" ${index}></div>`;
+        }
+        divHTML = $(divHTML).append(`
+            <div class="col-lg-1 grid-body-colum-checkbox" onclick="productJS.chooseRowCheckbox(this, ${product[index].ProductID})">
+                <span class="grid-body-checkbox-icon"></span>
+            </div>
+            <div class="col-lg-1 grid-body-colum grid-body-colum-sku">${product[index].SKUCode}</div>
+            <div class="col-lg-4 grid-body-colum grid-body-colum-productname">
+                <a href="#">${product[index].ProductName}</a>
+            </div>
+            <div class="col-lg-1 grid-body-colum grid-body-colum-groupproduct">${product[index].ProductGroupName}</div>
+            <div class="col-lg-1 grid-body-colum grid-body-colum-counter">${product[index].CalculationUnitName}</div>
+            <div class="col-lg-1 grid-body-colum grid-body-colum-price">${product[index].SalePrice}</div>
+            <div class="col-lg-1 grid-body-colum grid-body-colum-displayscreen">Có</div>
+            <div class="col-lg-1 grid-body-colum grid-body-colum-category">Hàng hóa</div>
+            <div class="col-lg-1 grid-body-colum grid-body-colum-status">Đang kinh doanh</div>
+                                `);
+        $('.grid-body').append(divHTML);
+    }
     
 }
 
