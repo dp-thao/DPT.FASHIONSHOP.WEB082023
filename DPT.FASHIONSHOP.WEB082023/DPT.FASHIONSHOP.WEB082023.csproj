@@ -186,11 +186,14 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\Image\ImgContent\arrow-down-line.png" />
     <Content Include="Content\Image\ImgContent\arrow-down-white.png" />
+    <Content Include="Content\Image\ImgContent\cancel-blue.png" />
     <Content Include="Content\Image\ImgContent\check.png" />
     <Content Include="Content\Image\ImgContent\common-icon.png" />
     <Content Include="Content\Image\ImgContent\copy-down.png" />
+    <Content Include="Content\Image\ImgContent\delete-white.png" />
     <Content Include="Content\Image\ImgContent\exclamation.png" />
     <Content Include="Content\Image\ImgContent\icon-delete.png" />
+    <Content Include="Content\Image\ImgContent\icon-popup.png" />
     <Content Include="Content\Image\ImgContent\quick-add.png" />
     <Content Include="Content\Image\ImgHeader\arrow-down-line.png" />
     <Content Include="Content\Image\ImgHeader\back.png" />

@@ -56,10 +56,27 @@ namespace DPT.FASHIONSHOP.WEB082023.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Thêm mới product
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
         public JsonResult AddNewProduct(Product product)
         {
             AjaxResult result = new AjaxResult();
             productBL.AddNewProduct(product);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Xóa product
+        /// </summary>
+        /// <param name="arrProductIsChoose"></param>
+        /// <returns></returns>
+        public JsonResult DeleteProduct(Guid[] productIDs)
+        {
+            AjaxResult result = new AjaxResult();
+            productBL.DeleteProduct(productIDs);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

@@ -187,6 +187,17 @@ class ProductDetail {
                 productDetail.deleteProduct();
             }
         });
+        $('#btnProductBottomSave').on('click', function () {
+            if (statusSave == 'add') {
+                productDetail.addNewProduct();
+            }
+            if (statusSave == 'edit') {
+                productDetail.editProduct();
+            }
+            if (statusSave == 'delete') {
+                productDetail.deleteProduct();
+            }
+        });
 
         // Sự kiện hiển thị file Ảnh hàng hóa
         $('#btnInputImage').on('click', function () {
@@ -852,7 +863,26 @@ class ProductDetail {
 
     // Hàm xóa product
     deleteProduct() {
-        alert(123);
+        $.ajax({
+            method: 'POST', // phương thức gửi request
+            data: { arrProductIsChoose: arrProductIsChoose }, // dữ liệu gửi đi chứa trong body
+            url: '/Product/DeleteProduct',
+            type: 'DELETE',
+            success: function () {
+                productJS.loadData();
+                $('.ui-form-delete').css('display', 'none');
+                $('.ui-widget-overlay').css('display', 'none');
+                alert("Xóa thành công!");
+            },
+            false: function () {
+                alert('Thất bại');
+                console.log("Delete new product: Thất bại");
+            },
+            error: function () {
+                alert('Lỗi');
+                console.log("Delete new product: Lỗi");
+            }
+        });
     }
 }
 

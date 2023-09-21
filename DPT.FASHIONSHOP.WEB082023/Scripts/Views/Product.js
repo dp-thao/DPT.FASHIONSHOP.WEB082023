@@ -6,6 +6,7 @@ $(document).ready(function () {
 
 var sumPage = 0; // Biến nhận biết tổng số trang
 var statusSave = null; // Biến nhận biết trạng thái tương tác Thêm, Sửa, Xóa, Nhân bản
+var arrProductIsChoose = []; // Mảng chứa product muốn xóa
 
 class ProductJS {
     constructor() {
@@ -177,9 +178,35 @@ class ProductJS {
             $('.panel-title-text-task').html('/&ensp;Sửa');
             $('.content-status-option').css('display', 'flex');
         });
-
+        // Sự kiện nhất nút Xóa
         $('#btnDeleteProduct').on('click', function () {
-            statusSave = 'delete';
+            if (arrProductIsChoose.length == 0) {
+                alert('Không có thông tin sản phẩm cần xóa!');
+            } else {
+                statusSave = 'delete';
+                // Ẩn
+                // Hiện
+                $('.ui-form-delete').css('display', 'block');
+                $('.ui-widget-overlay').css('display', 'block');
+            }
+        });
+        // Sự kiện đóng form xóa
+        $('#btncanceldelete').on('click', function () {
+            statusSave = '';
+            $('.ui-form-delete').css('display', 'none');
+            $('.ui-widget-overlay').css('display', 'none');
+        });
+        // Sự kiện đóng form xóa
+        $('.ui-dialog-titlebar-close').on('click', function () {
+            statusSave = '';
+            $('.ui-form-delete').css('display', 'none');
+            $('.ui-widget-overlay').css('display', 'none');
+        });
+        // Sự kiện xác nhận xóa product
+        $('#btnconfirmdelete').on('click', function () {
+            if (arrProductIsChoose.length > 0) {
+                productDetail.deleteProduct();
+            }
         });
 
         // Sự kiện nhấn kích thước trang
@@ -188,6 +215,12 @@ class ProductJS {
             var pageSize = this.value; // kích thước trang
             $('#pagingnumberinput').val('1');
             productJS.productListPaging(1, pageSize);
+            // Bỏ lựa chọn ô check box
+            if ($('.grid-header-checkcolumn-icon').hasClass('grid-body-row-checkbox-icon-checked')) {
+                $('.grid-header-checkcolumn-icon').removeClass('grid-body-row-checkbox-icon-checked');
+                $('#btnDuplicateProduct').removeClass('toolbar-button-disable-event');
+                $('#btnEditProduct').removeClass('toolbar-button-disable-event');
+            }
         });
 
         // Sự kiện trang tiếp theo
@@ -199,6 +232,12 @@ class ProductJS {
                 productJS.productListPaging(currentPage, pageSize);
             } else {
                 productJS.productListPaging(currentPage, pageSize);
+            }
+            // Bỏ lựa chọn ô check box
+            if ($('.grid-header-checkcolumn-icon').hasClass('grid-body-row-checkbox-icon-checked')) {
+                $('.grid-header-checkcolumn-icon').removeClass('grid-body-row-checkbox-icon-checked');
+                $('#btnDuplicateProduct').removeClass('toolbar-button-disable-event');
+                $('#btnEditProduct').removeClass('toolbar-button-disable-event');
             }
         });
 
@@ -212,23 +251,38 @@ class ProductJS {
             } else {
                 productJS.productListPaging(currentPage, pageSize);
             }
+            // Bỏ lựa chọn ô check box
+            if ($('.grid-header-checkcolumn-icon').hasClass('grid-body-row-checkbox-icon-checked')) {
+                $('.grid-header-checkcolumn-icon').removeClass('grid-body-row-checkbox-icon-checked');
+                $('#btnDuplicateProduct').removeClass('toolbar-button-disable-event');
+                $('#btnEditProduct').removeClass('toolbar-button-disable-event');
+            }
         });
 
     }
 
     // ======================== Hàm xử lý nghiệp vụ ========================
     // Hàm xử lý click checkbox
-    chooseRowCheckbox(element) {
+    chooseRowCheckbox(element, productID) {
         if ($(element).children().hasClass('grid-body-row-checkbox-icon-checked')) {
             $(element).children().removeClass('grid-body-row-checkbox-icon-checked');
+            // kiểm tra product đã có trong danh sách xóa chưa, nếu có thì xóa product đó đi
+            if (arrProductIsChoose.includes(productID) === true) {
+                var indexProduct = arrProductIsChoose.indexOf(productID);
+                arrProductIsChoose.splice(indexProduct, 1);
+            }
         } else {
             $(element).children().addClass('grid-body-row-checkbox-icon-checked');
+            // kiểm tra product đã có trong danh sách xóa chưa, nếu chưa có thì thêm vào danh sách xóa
+            if (arrProductIsChoose.includes(productID) === false) {
+                arrProductIsChoose.push(productID);
+            }
         }
 
         // Kiểm tra các ô check box đã click hết chưa, nếu đã click hết thì click checkbox tất cả, nếu chưa thì không click checkbox all
         var dem = 0;
         var classList = $('.grid-body-checkbox-icon'); // danh sách các ô checkbox
-        $.each(classList, function (index, item) { // lăp kiểm tra từng ô checkbox xem đã click chưa
+        $.each(classList, function (index, item) { // lặp kiểm tra từng ô checkbox xem đã click chưa
             // nếu chưa click thì biến đếm giữ nguyên, nếu click thì biến đếm tăng 1
             if ($(item).hasClass('grid-body-row-checkbox-icon-checked') == true) {
                 dem++;
@@ -271,7 +325,20 @@ class ProductJS {
         $('.content-status-option').css('display', 'flex');
     }
 
-    // ======================== Thao tác với dữ liệu ========================
+    // Hàm xử lý click tất cả sản phẩm thì thêm các sản phẩm vào danh sách sản phẩm cần xóa
+    allProductIsChoose() {
+        var arr = $('.grid-body-checkbox-icon');
+        $.each(arr, function (index, item) {
+            var classEle = item.classList[0];
+            if ($(item).hasClass('grid-body-row-checkbox-icon-checked')) {
+                // đang làm dở
+                var idProduct = $(item).parents(".row-input-div-productname")
+                arrProductIsChoose.push();
+            }
+        });
+    }
+    
+    // ======================== Hàm thao tác với dữ liệu ========================
     // Đổ dữ liệu lên grid view
     loadData() {
         $('.grid-body').empty();
@@ -289,7 +356,7 @@ class ProductJS {
                     var sumRow = data.length;
                     /*var sumPage = 0;*/
                     // Tính tổng số trang
-                    if (sumRow % 2 == 0) {
+                    if (sumRow % 10 == 0) {
                         sumPage = sumRow / 10;
                     } else {
                         sumPage = Math.floor(sumRow / 10) + 1;

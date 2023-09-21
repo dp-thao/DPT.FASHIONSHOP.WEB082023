@@ -60,6 +60,7 @@ namespace DPT.DL
             return listProduct;
         }
         
+        // Thêm mới product
         public void AddNewProduct(Product product)
         {
             // Mở chuỗi kết nối
@@ -94,6 +95,28 @@ namespace DPT.DL
             }
             _sqlCommand.ExecuteNonQuery();
             
+        }
+
+        // Xóa product
+        public void DeleteProduct(Guid[] productIDs)
+        {
+            if (productIDs.Length > 0)
+            {
+                // Mở chuỗi kết nối
+                _sqlConnection = new SqlConnection(_connectionString);
+                for (int item = 0; item < productIDs.Length; item++)
+                {
+                    _sqlCommand = _sqlConnection.CreateCommand();
+                    _sqlCommand.CommandType = CommandType.StoredProcedure;
+                    _sqlCommand.CommandText = "[dbo].[Proc_DeleteProduct]";
+                    _sqlCommand.Parameters.AddWithValue("@ProductID", productIDs[item]);
+                    if (_sqlConnection.State == ConnectionState.Closed)
+                    {
+                        _sqlConnection.Open();
+                    }
+                    _sqlCommand.ExecuteNonQuery();
+                }
+            }             
         }
         #endregion
     }

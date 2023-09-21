@@ -848,22 +848,23 @@
     </div>
 
     <!-- ===================================== FORM DELETE PRODUCT ========================================== -->
-    <div class="ui-dialog ui-corner-all ui-widget ui-widget-content ui-front ui-draggable" style="height: auto; width: 400px; top: 294.7px; left: 568px; z-index: 101;">
+    <!-- Form xóa -->
+    <div class="ui-dialog ui-corner-all ui-widget ui-widget-content ui-front ui-draggable ui-form-delete">
         <div class="ui-dialog-titlebar ui-corner-all ui-widget-header ui-helper-clearfix ui-draggable-handle">
             <span id="ui-id-1" class="ui-dialog-title">Xóa dữ liệu</span>
             <button class="ui-dialog-titlebar-close"></button>
         </div>
-        <div id="dialogconfirmdelete" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 106.4px; max-height: none; height: auto;">
+        <div id="dialogconfirmdelete" class="ui-dialog-content ui-widget-content">
             <div class="dialog-message">
                 <div class="dialog-message-icon"></div>
-                <div class="dialog-message-text dialog-message-text-delete" style="display: block;">
+                <div class="dialog-message-text dialog-message-text-delete">
                     <span>Bạn có chắc chắn muốn xóa hàng hóa</span>
                     <b id="dialog-delete-productname" class="dialog-delete-productname">Áo len nam</b>
                     <b class="boled-dialog-message">-</b>
                     <b id="dialog-delete-sku" class="boled-dialog-message">(ALN01)</b>
                     <span> không?</span>
                 </div>
-                <div class="dialog-message-text dialog-message-text-deletemany" style="display: none;">
+                <div class="dialog-message-text dialog-message-text-deletemany">
                     <span>Bạn có chắc chắn muốn xóa các hàng hóa đã chọn không ?</span>
                 </div>
             </div>
@@ -879,11 +880,16 @@
             </div>
         </div>
     </div>
-    <div tabindex="-1" role="dialog" class="ui-dialog ui-corner-all ui-widget ui-widget-content ui-front ui-draggable" aria-describedby="dialogdupplicaeproductcode" aria-labelledby="ui-id-2" style="display: none;">
-        <div class="ui-dialog-titlebar ui-corner-all ui-widget-header ui-helper-clearfix ui-draggable-handle"><span id="ui-id-2" class="ui-dialog-title">Mshopkeeper</span><button type="button" class="ui-dialog-titlebar-close"></button></div><div id="dialogdupplicaeproductcode" style="" class="ui-dialog-content ui-widget-content">
+    <!-- Form thông báo -->
+    <div class="ui-dialog ui-corner-all ui-widget ui-widget-content ui-front ui-draggable ui-form-infomation">
+        <div class="ui-dialog-titlebar ui-corner-all ui-widget-header ui-helper-clearfix ui-draggable-handle">
+            <span id="ui-id-1" class="ui-dialog-title">Mshopkeeper</span>
+            <button type="button" class="ui-dialog-titlebar-close"></button>
+        </div>
+        <div id="dialogdupplicaeproductcode" class="ui-dialog-content ui-widget-content">
             <div class="dialog-message">
                 <div class="dialog-warnning-icon"></div>
-                <div class="dialog-message-text dialog-message-text-delete" style="display: block;">
+                <div class="dialog-message-text dialog-message-text-delete">
                     Mã SKU <b id="dialog-dupplicate-productcode" class="boled-dialog-message">JYUY7678 </b> đã tồn tại trong hệ thống. Vui lòng kiểm tra lại.
                 </div>
             </div>
@@ -894,6 +900,7 @@
             </div>
         </div>
     </div>
-    <div class="ui-widget-overlay ui-front" style="z-index: 100;"></div>
+    <!-- Màn mờ -->
+    <div class="ui-widget-overlay ui-front"></div>
 </div>
 
