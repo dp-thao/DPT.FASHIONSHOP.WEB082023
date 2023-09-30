@@ -409,7 +409,7 @@
                         <span style="color:red;margin-left:3px;">*</span>
                     </div>
                     <div class="row-input-div-productname" id="row-input-div-productname">
-                        <input class="row-detail-input row-detail-input-option" id="txtproductname" type="text" />
+                        <input class="row-detail-input row-detail-input-option" id="txtproductname" type="text" datafield="ProductName" datatype="string"/>
                         <span id="errorproductname" class="row-detail-input-error" data-title="Trường này không được để trống."></span>
                     </div>
                 </div>
@@ -419,7 +419,7 @@
                         <span>Nhóm hàng hóa</span>
                     </div>
                     <div class="row-input-div">
-                        <input class="row-detail-input row-detail-input-option" id="txtproductcategory" autocomplete="off" type="text" placeholder="Nhập để tìm kiếm" />
+                        <input class="row-detail-input row-detail-input-option" id="txtproductcategory" autocomplete="off" type="text" placeholder="Nhập để tìm kiếm" datafield="ProductGroupName" datatype="string"/>
                         <span id="cbocategoryoption" class="row-detail-input-cbobutton"></span>
                         <span class="row-detail-input-addbutton"></span>
                         <div class="input-list-option" id="divcategoryoption">
@@ -442,7 +442,7 @@
                         <span>Mã SKU</span>
                     </div>
                     <div class="row-input-div">
-                        <input class="row-detail-input" id="txtskucode" autocomplete="off" type="text" placeholder="Hệ thống tự sinh khi bỏ trống" />
+                        <input class="row-detail-input" id="txtskucode" autocomplete="off" type="text" placeholder="Hệ thống tự sinh khi bỏ trống" datafield="SKUCode" datatype="string" />
                     </div>
                 </div>
                 <!-- Mã vạch -->
@@ -451,7 +451,7 @@
                         <span>Mã vạch</span>
                     </div>
                     <div class="row-input-div" id="row-input-div-barcode">
-                        <input class="row-detail-input" id="txtproductbarcode" autocomplete="off" type="text" placeholder="Hệ thống tự sinh khi bỏ trống" />
+                        <input class="row-detail-input" id="txtproductbarcode" autocomplete="off" type="text" placeholder="Hệ thống tự sinh khi bỏ trống" datafield="BarCode" datatype="string"/>
                     </div>
                 </div>
                 <!-- Giá mua -->
@@ -461,7 +461,7 @@
                         <span class="row-detail-title-tip" title="Giá mua gần nhât, phần mềm tự cập nhật sau mỗi lần nhập hàng"></span>
                     </div>
                     <div class="row-input-div row-input-div-halfwidth">
-                        <input class="row-detail-input row-detail-input-number" id="txtproductimportprice" autocomplete="off" type="text" value="0" maxlength="14" /> <!-- onkeypress="return onlyNumberInput(event)" -->
+                        <input class="row-detail-input row-detail-input-number" id="txtproductimportprice" autocomplete="off" type="text" value="0" maxlength="14" datafield="PurchasePrice" datatype="number"/> <!-- onkeypress="return onlyNumberInput(event)" -->
                     </div>
                 </div>
                 <!-- Giá bán -->
@@ -470,7 +470,7 @@
                         <span>Giá bán</span>
                     </div>
                     <div class="row-input-div row-input-div-halfwidth">
-                        <input class="row-detail-input row-detail-input-number" id="txtproductsellprice" autocomplete="off" type="text" value="0" maxlength="14" />
+                        <input class="row-detail-input row-detail-input-number" id="txtproductsellprice" autocomplete="off" type="text" value="0" maxlength="14" datafield="SalePrice" datatype="number" />
                     </div>
                 </div>
                 <!-- Đơn vị tính -->
@@ -479,7 +479,7 @@
                         <span>Đơn vị tính</span>
                     </div>
                     <div class="row-input-div">
-                        <input class="row-detail-input row-detail-input-option" id="txtcounterproduct" autocomplete="off" type="text" placeholder="Nhập để tìm kiếm" />
+                        <input class="row-detail-input row-detail-input-option" id="txtcounterproduct" autocomplete="off" type="text" placeholder="Nhập để tìm kiếm" datafield="CalculationUnitName" datatype="string"/>
                         <span id="cbocounteroption" class="row-detail-input-cbobutton"></span>
                         <div class="input-list-option input-list-option-counter" id="divcounteroption">
                             <ul class="input-list-option-block input-counter-option-block">
@@ -499,7 +499,7 @@
                         <span>Tồn kho ban đầu</span>
                     </div>
                     <div class="row-input-div row-input-div-halfwidth">
-                        <input class="row-detail-input row-detail-input-number" id="txtfirstquantity" autocomplete="off" type="text" value="0" maxlength="14" />
+                        <input class="row-detail-input row-detail-input-number" id="txtfirstquantity" autocomplete="off" type="text" value="0" maxlength="14" datafield="InitialInventoryQuantity" datatype="number"/>
                     </div>
                     <span class="row-detail-input-tip"><i>Tồn kho ban đầu chỉ được nhập khi thêm mới hàng hóa</i></span>
                 </div>
@@ -511,11 +511,11 @@
                     <div class="row-input-div-manyinput">
                         <div class="row-input-div-manyinput-content">
                             <div class="row-input-div-manyinput-content-title">Tối thiểu</div>
-                            <input id="txtminquantity" class="row-detail-input-number row-input-div-manyinput-content-input" type="text" value="0" autocomplete="off" maxlength="14" />
+                            <input id="txtminquantity" class="row-detail-input row-detail-input-number row-input-div-manyinput-content-input" type="text" value="0" autocomplete="off" maxlength="14" datafield="MinQuantity" datatype="number"/>
                         </div>
                         <div class="row-input-div-manyinput-content">
                             <div class="row-input-div-manyinput-content-title">Tối đa</div>
-                            <input id="txtmaxquantity" class="row-detail-input-number row-input-div-manyinput-content-input" type="text" value="0" autocomplete="off" maxlength="14" />
+                            <input id="txtmaxquantity" class="row-detail-input row-detail-input-number row-input-div-manyinput-content-input" type="text" value="0" autocomplete="off" maxlength="14" datafield="MaxQuantity" datatype="number"/>
                         </div>
                     </div>
                 </div>
@@ -525,7 +525,7 @@
                         <span>Vị trí kho lưu trữ</span>
                     </div>
                     <div class="row-input-div">
-                        <input class="row-detail-input" autocomplete="off" type="text" />
+                        <input class="row-detail-input stock-location" autocomplete="off" type="text" datafield="StockLocation" datatype="number"/>
                     </div>
                 </div>
                 <!-- Vị trí trưng bày -->
@@ -534,12 +534,12 @@
                         <span>Vị trí trưng bày</span>
                     </div>
                     <div class="row-input-div">
-                        <input class="row-detail-input" autocomplete="off" type="text" />
+                        <input class="row-detail-input display-location" autocomplete="off" type="text" datafield="DisplayLocation" datatype="number"/>
                     </div>
                 </div>
                 <!-- Hiển thị trên màn hình bán -->
                 <div class="row-detail row-display-option">
-                    <input id="chkdisplayonscreen" type="checkbox" />
+                    <input id="chkdisplayonscreen" type="checkbox" checked datafield="InActive" datatype="checkbox"/>
                     <span class="row-option-text">Hiển thị trên màn hình bán</span>
                     <span class="row-detail-title-tip" title="title=" Hàng hóa được bán trực tiếp. Bỏ tích nếu chỉ bán hàng hóa trong combo hoặc tặng hàng""></span>
                 </div>

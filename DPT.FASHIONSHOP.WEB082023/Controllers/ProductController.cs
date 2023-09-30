@@ -18,6 +18,10 @@ namespace DPT.FASHIONSHOP.WEB082023.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Lấy danh sách product
+        /// </summary>
+        /// <returns>danh sách product</returns>
         public JsonResult Get()
         {
             // Đối tượng trả về
@@ -71,13 +75,14 @@ namespace DPT.FASHIONSHOP.WEB082023.Controllers
         /// <summary>
         /// Xóa product
         /// </summary>
-        /// <param name="arrProductIsChoose"></param>
+        /// <param name="arrProductIsChoose">Danh sách productID</param>
         /// <returns></returns>
-        public JsonResult DeleteProduct(Guid[] productIDs)
+        public JsonResult DeleteProduct(Guid[] arrProductIsChoose)
         {
             AjaxResult result = new AjaxResult();
-            productBL.DeleteProduct(productIDs);
+            productBL.DeleteProduct(arrProductIsChoose);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+    
     }
 }

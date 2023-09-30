@@ -110,6 +110,21 @@ namespace DPT.Entity
         public Guid ProductTypeID { get; set; }
 
         /// <summary>
+        /// Ngày tạo
+        /// </summary>
+        public DateTime CreatedDate { get; set; }
+
+        /// <summary>
+        /// Người tạo
+        /// </summary>
+        public Guid CreatedBy { get; set; }
+
+        /// <summary>
+        /// Ngày sửa đổi
+        /// </summary>
+        public DateTime ModifiedDate { get; set; }
+
+        /// <summary>
         /// tên nhóm hàng hóa - theo khóa ngoại
         /// </summary>
         public string ProductGroupName { get; set; }
@@ -128,6 +143,7 @@ namespace DPT.Entity
         /// Tên tài khoản người sửa - truy vấn theo khóa ngoại
         /// </summary>
         public string UserName { get; set; }
+
         #endregion
     }
 }

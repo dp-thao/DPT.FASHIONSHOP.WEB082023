@@ -2,11 +2,29 @@
 $(document).ready(function () {
     //Load dữ liệu vào gridview
     productJS.loadData();
+    productJS.recordNumber(1, 10);
 })
 
+const VND = new Intl.NumberFormat('vi', {
+    style: 'currency',
+    currency: 'VND',
+});
+
+// Tổng số product
+var sumProduct = 0;
+// Các biến dùng cho phân trang
+var rowBegin = 1; // dòng bắt đầu
+var rowEnd = 2; // dòng kết thúc
 var sumPage = 0; // Biến nhận biết tổng số trang
+
+// Biến nhận biết ID của dòng đang được chọn (phục vụ fill data vào dialog sửa)
+var currentID = '';
+// Biến nhận biết hàng hóa người dùng đang chọn tên là gì
+var currentProductName = '';
+var currentSKU = ''; // Biến nhận biết mã SKU người dùng đang chọn
 var statusSave = null; // Biến nhận biết trạng thái tương tác Thêm, Sửa, Xóa, Nhân bản
 var arrProductIsChoose = []; // Mảng chứa product muốn xóa
+var arrProductInfoDelete = []; // Mảng chứa thông tin product được chọn
 
 class ProductJS {
     constructor() {
@@ -188,6 +206,25 @@ class ProductJS {
                 // Hiện
                 $('.ui-form-delete').css('display', 'block');
                 $('.ui-widget-overlay').css('display', 'block');
+                // Thay đổi thông tin tên và mã SKU trong form xác nhận xóa
+                if (arrProductIsChoose.length == 1) {
+                    var arrRows = $('.grid-body-row');
+                    $.each(arrRows, function (index, item) {
+                        if ($(item).find('.grid-body-checkbox-icon').hasClass('grid-body-row-checkbox-icon-checked') == true) {
+                            currentProductName = $(item).find('.grid-body-colum-productname a').text();
+                            currentSKU = $(item).find('.grid-body-colum-sku').text();
+                            // Lấy tên product khi click checkbox
+                            $('#dialog-delete-productname').text(currentProductName);
+                            $('#dialog-delete-sku').text(currentSKU);
+                        }
+                    });
+                    // Hiện thông báo
+                    $('.dialog-message-text-delete').css('display', 'block');
+                    $('.dialog-message-text-deletemany').css('display', 'none');
+                } else {
+                    $('.dialog-message-text-delete').css('display', 'none');
+                    $('.dialog-message-text-deletemany').css('display', 'block');
+                }
             }
         });
         // Sự kiện đóng form xóa
@@ -211,10 +248,10 @@ class ProductJS {
 
         // Sự kiện nhấn kích thước trang
         $('.paging-record-select').on('change', function () {
-            console.log(this.value);
             var pageSize = this.value; // kích thước trang
             $('#pagingnumberinput').val('1');
             productJS.productListPaging(1, pageSize);
+            productJS.recordNumber(1, pageSize);
             // Bỏ lựa chọn ô check box
             if ($('.grid-header-checkcolumn-icon').hasClass('grid-body-row-checkbox-icon-checked')) {
                 $('.grid-header-checkcolumn-icon').removeClass('grid-body-row-checkbox-icon-checked');
@@ -259,23 +296,35 @@ class ProductJS {
             }
         });
 
+        // Sự kiện nhấn trang đầu tiên
+        $('.btn-paging-firstpage').on('click', function () {
+            var pageSize = $('.paging-record-select').val();
+            productJS.productListPaging(1, pageSize);
+        });
+
+        // Sự kiện nhấn trang cuối cùng
+        $('.btn-paging-lastpage').on('click', function () {
+            var pageSize = $('.paging-record-select').val();
+            //productJS.productListPaging(sumProduct, pageSize);
+        });
+
     }
 
     // ======================== Hàm xử lý nghiệp vụ ========================
     // Hàm xử lý click checkbox
-    chooseRowCheckbox(element, productID) {
+    chooseRowCheckbox(element, productIDName) {
         if ($(element).children().hasClass('grid-body-row-checkbox-icon-checked')) {
             $(element).children().removeClass('grid-body-row-checkbox-icon-checked');
             // kiểm tra product đã có trong danh sách xóa chưa, nếu có thì xóa product đó đi
-            if (arrProductIsChoose.includes(productID) === true) {
-                var indexProduct = arrProductIsChoose.indexOf(productID);
+            if (arrProductIsChoose.includes(productIDName) === true) {
+                var indexProduct = arrProductIsChoose.indexOf(productIDName);
                 arrProductIsChoose.splice(indexProduct, 1);
             }
         } else {
             $(element).children().addClass('grid-body-row-checkbox-icon-checked');
             // kiểm tra product đã có trong danh sách xóa chưa, nếu chưa có thì thêm vào danh sách xóa
-            if (arrProductIsChoose.includes(productID) === false) {
-                arrProductIsChoose.push(productID);
+            if (arrProductIsChoose.includes(productIDName) === false) {
+                arrProductIsChoose.push(productIDName);
             }
         }
 
@@ -305,11 +354,11 @@ class ProductJS {
     }
 
     // Hàm xử lý sự kiện click dòng product
-    setCurrentID(element) {
+    setCurrentID(element, productID) {
         //Đổi màu dòng khi click
         $('.grid-body-row-odd').css('background', '#fff');
         $('.grid-body-row-even').css('background', 'rgb(246, 246, 246)');
-        $(element).css('background', '#c3ecff');
+        $(element).css('background', '#c3ecff');       
     }
 
     // Hàm xử lý double click dòng product
@@ -354,6 +403,7 @@ class ProductJS {
                 if (response.Data.length > 0) {
                     var data = response.Data;
                     var sumRow = data.length;
+                    sumProduct = data.length;
                     /*var sumPage = 0;*/
                     // Tính tổng số trang
                     if (sumRow % 10 == 0) {
@@ -424,17 +474,21 @@ class ProductJS {
                         if (currentPage == 1) {
                             for (var i = 0; i < pageSize; i++) {
                                 productJS.productRows(i, data);
+                                productJS.recordNumber(1, pageSize);
                             }
                         } else {
                             var rowBegin = (currentPage - 1) * pageSize;
                             var rowEnd = rowBegin + Number(pageSize);
+                            var end = 0;
                             for (var i = rowBegin; i < rowEnd; i++) {
                                 if (data[i] != null) {
                                     productJS.productRows(i, data);
+                                    end = i+1;
                                 } else {
                                     break;
                                 }
                             }
+                            productJS.recordNumber(rowBegin, end);
                         }
                     }                  
                     
@@ -454,8 +508,9 @@ class ProductJS {
     // Hàm hỗ trợ hiển thị dòng product theo phân trang
     productRows(index, product) {
         var divHTML = '';
+        var salePrice = VND.format(product[index].SalePrice);
         if (index % 2 == 0) {
-            divHTML = `<div class="row grid-body-row grid-body-row-odd" onclick="productJS.setCurrentID(this)" ondblclick="productJS.dbclickToEdit(this, '${product[index].ProductID}')" indexRow="${index}"></div>`;
+            divHTML = `<div class="row grid-body-row grid-body-row-odd" onclick="productJS.setCurrentID(this, '${product[index].ProductID}')" ondblclick="productJS.dbclickToEdit(this, '${product[index].ProductID}')" indexRow="${index}"></div>`;
         } else {
             divHTML = `<div class="row grid-body-row grid-body-row-even" onclick="productJS.setCurrentID(this)" ondblclick="productJS.dbclickToEdit(this, '${product[index].ProductID}')" indexRow="${index}"></div>`;
         }
@@ -469,7 +524,7 @@ class ProductJS {
             </div>
             <div class="col-lg-1 grid-body-colum grid-body-colum-groupproduct">${product[index].ProductGroupName}</div>
             <div class="col-lg-1 grid-body-colum grid-body-colum-counter">${product[index].CalculationUnitName}</div>
-            <div class="col-lg-1 grid-body-colum grid-body-colum-price">${product[index].SalePrice}</div>
+            <div class="col-lg-1 grid-body-colum grid-body-colum-price">${salePrice}</div>
             <div class="col-lg-1 grid-body-colum grid-body-colum-displayscreen">Có</div>
             <div class="col-lg-1 grid-body-colum grid-body-colum-category">Hàng hóa</div>
             <div class="col-lg-1 grid-body-colum grid-body-colum-status">Đang kinh doanh</div>
@@ -477,6 +532,11 @@ class ProductJS {
         $('.grid-body').append(divHTML);
     }
 
+    // Hàm hiển thị thông báo số sản phẩm
+    recordNumber(start, end) {
+        //Hiển thị 1 - 50 trên 345 kết quả
+        $('.lbl-record-number').text(`Hiển thị ${start} - ${end} trên ${sumProduct} kết quả`);
+    }
 }
 
 var productJS = new ProductJS();

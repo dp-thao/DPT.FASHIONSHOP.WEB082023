@@ -35,7 +35,7 @@ namespace DPT.DL
             // Mở chuỗi kết nối
             _sqlConnection = new SqlConnection(_connectionString);
             _sqlCommand = _sqlConnection.CreateCommand();
-            _sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+            _sqlCommand.CommandType = CommandType.StoredProcedure;
             _sqlCommand.CommandText = "[dbo].[Proc_GetListProduct]";
             if (_sqlConnection.State == ConnectionState.Closed)
             {
@@ -68,33 +68,27 @@ namespace DPT.DL
             _sqlCommand = _sqlConnection.CreateCommand();
             _sqlCommand.CommandType = CommandType.StoredProcedure;
             _sqlCommand.CommandText = "[dbo].[Proc_InsertProduct]";
-            _sqlCommand.Parameters.AddWithValue("@ProductName", product.ProductName);
-            _sqlCommand.Parameters.AddWithValue("@SKUCode", product.SKUCode);
-            _sqlCommand.Parameters.AddWithValue("@BarCode", product.BarCode);
-            _sqlCommand.Parameters.AddWithValue("@PurchasePrice", product.PurchasePrice);
-            _sqlCommand.Parameters.AddWithValue("@SalePrice", product.SalePrice);
-            _sqlCommand.Parameters.AddWithValue("@CalculationUnitID", product.CalculationUnitID);
-            _sqlCommand.Parameters.AddWithValue("@InitialInventoryQuantity", product.InitialInventoryQuantity);
-            _sqlCommand.Parameters.AddWithValue("@MinQuantity", product.MinQuantity);
-            _sqlCommand.Parameters.AddWithValue("@MaxQuantity", product.MaxQuantity);
-            _sqlCommand.Parameters.AddWithValue("@StockLocation", product.StockLocation);
-            _sqlCommand.Parameters.AddWithValue("@DisplayLocation", product.DisplayLocation);
-            _sqlCommand.Parameters.AddWithValue("@Status", product.Status);
-            _sqlCommand.Parameters.AddWithValue("@InActive", product.InActive);
-            _sqlCommand.Parameters.AddWithValue("@Description", product.Description);
-            _sqlCommand.Parameters.AddWithValue("@ProductGroupID", product.ProductGroupID);
-            _sqlCommand.Parameters.AddWithValue("@ColorTag", product.ColorTag);
-            _sqlCommand.Parameters.AddWithValue("@SizeTag", product.SizeTag);
-            _sqlCommand.Parameters.AddWithValue("@Image", product.Image);
-            _sqlCommand.Parameters.AddWithValue("@ProductTypeID", product.ProductTypeID);
-            _sqlCommand.Parameters.AddWithValue("@CreatedDate", DateTime.Now);
-            _sqlCommand.Parameters.AddWithValue("@CreatedBy", "00000000-0000-0000-0000-000000000000");
             if (_sqlConnection.State == ConnectionState.Closed)
             {
                 _sqlConnection.Open();
             }
+            SqlCommandBuilder.DeriveParameters(_sqlCommand);
+            foreach (SqlParameter p in _sqlCommand.Parameters)
+            {
+                if (p.ParameterName == "@CreatedDate")
+                {
+                    p.Value = DateTime.Now;
+                    continue;
+                }
+                if (_sqlCommand.Parameters.IndexOf(p) != 0)
+                {                    
+                    var property = p.ParameterName.Replace("@", "");
+                    var value = product.GetType().GetProperty(property).GetValue(product);
+                    p.Value = value == null ? DBNull.Value : value;
+                }
+            }
             _sqlCommand.ExecuteNonQuery();
-            
+
         }
 
         // Xóa product

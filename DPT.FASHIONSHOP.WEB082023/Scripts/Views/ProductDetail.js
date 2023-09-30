@@ -721,6 +721,7 @@ class ProductDetail {
         var skuCode = $('#txtskucode').val().trim();
         $.ajax({
             type: 'POST',
+            data: skuCode,
             url: '/Product/CheckSkucode',
             dataType: 'json',
             success: function () {
@@ -806,29 +807,58 @@ class ProductDetail {
     // date: 11/08/2023
     addNewProduct() {
         var productObj = {};
-        productObj['ProductName'] = $('#txtproductname').val();
-        productObj['SKUCode'] = $('#txtskucode').val();
-        productObj['BarCode'] = '1234567';//$('#txtproductbarcode').val();
-        productObj['PurchasePrice'] = $('#txtproductimportprice').val();
-        productObj['SalePrice'] = $('#txtproductsellprice').val();
-        productObj['CalculationUnitID'] = selectedCalculationUnit;
-        productObj['InitialInventoryQuantity'] = $('#txtfirstquantity').val();
-        productObj['MinQuantity'] = $('#txtminquantity').val();
-        productObj['MaxQuantity'] = $('#txtmaxquantity').val();
-        productObj['StockLocation'] = 'Kho S';
-        productObj['DisplayLocation'] = 'Kệ S';
+        var arrFields = $('.row-detail-input');
+        $.each(arrFields, function (index, item) {
+            var dataField = item.attributes.dataField.value;
+            var dataType = item.attributes.dataType.value;
+            switch (dataType) {
+                case 'string':
+                    productObj[dataField] = item.value ? item.value : "";
+                    break;
+                case 'number':
+                    var numberCustom = item.value.replace(/\./g, "");
+                    productObj[dataField] = Number(numberCustom);
+                    break;
+                case 'checkbox':
+                    if ($(item).prop("checked") == true) {
+                        obj[fielData] = true;
+                    }
+                    else {
+                        obj[fielData] = false;
+                    }
+                    break;
+                default:
+                    productObj[dataField] = item.value ? item.value : "";
+                    break;
+            }
+        });
+        
+        //productObj['ProductName'] = $('#txtproductname').val();
+        //productObj['SKUCode'] = $('#txtskucode').val();
+        //productObj['BarCode'] = $('#txtproductbarcode').val();
+        //productObj['PurchasePrice'] = $('#txtproductimportprice').val();
+        //productObj['SalePrice'] = $('#txtproductsellprice').val();
+        //productObj['InitialInventoryQuantity'] = $('#txtfirstquantity').val();
+        //productObj['MinQuantity'] = $('#txtminquantity').val();
+        //productObj['MaxQuantity'] = $('#txtmaxquantity').val();
+        //productObj['StockLocation'] = $('.stock-location').val();
+        //productObj['DisplayLocation'] = $('.display-location').val();
+        //productObj['Description'] = $('#txtDescription').val();
+        //productObj['InActive'] = 0;
+
+        // Các trường có giá trị mặc định khi thêm mới
         productObj['Status'] = 1;
-        productObj['InActive'] = 0;
-        productObj['Description'] = 'Mô tả';
+        productObj['CalculationUnitID'] = selectedCalculationUnit;
         productObj['ProductGroupID'] = selectedGroupProduct;
-        productObj['ColorTag'] = colorTagList[colorTagList.length - 1];
-        productObj['SizeTag'] = sizeTagList[sizeTagList.length - 1];
+        productObj['ColorTag'] = colorTagList.toString();
+        productObj['SizeTag'] = sizeTagList.toString();
         productObj['Image'] = 'Img';
         productObj['ProductTypeID'] = '15027954-ccc2-4c76-9128-b656ae00f755';
         productObj['CreatedDate'] = Date.now();
         productObj['CreatedBy'] = '00000000-0000-0000-0000-000000000000';
-        if (productObj.ProductName != "" ||
-            productObj.SKUCode != "") {
+
+        // Tên sản phẩm không được phép để trống
+        if (productObj.ProductName != "") {
             // Gọi API 
             $.ajax({
                 method: 'POST',
@@ -865,13 +895,15 @@ class ProductDetail {
     deleteProduct() {
         $.ajax({
             method: 'POST', // phương thức gửi request
-            data: { arrProductIsChoose: arrProductIsChoose }, // dữ liệu gửi đi chứa trong body
+            data: { arrProductIsChoose: arrProductIsChoose },// { arrProductIsChoose: arrProductIsChoose }, // dữ liệu gửi đi chứa trong body
             url: '/Product/DeleteProduct',
             type: 'DELETE',
             success: function () {
                 productJS.loadData();
                 $('.ui-form-delete').css('display', 'none');
                 $('.ui-widget-overlay').css('display', 'none');
+                $('#btnDuplicateProduct').removeClass('toolbar-button-disable-event');
+                $('#btnEditProduct').removeClass('toolbar-button-disable-event');
                 alert("Xóa thành công!");
             },
             false: function () {
